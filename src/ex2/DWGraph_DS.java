@@ -229,6 +229,17 @@ public class DWGraph_DS implements directed_weighted_graph {
     public int getMC() {
         return this.modeCount;
     }
+
+    public Collection<Integer> getV (int id){
+        return edgesOfGraph.get(id).keySet() ;
+
+    }
+
+    public Collection<Integer> getOV (int id){
+        return reverse.get(id).keySet() ;
+    }
+
+
 }
 
 
