@@ -1,6 +1,8 @@
 package ex2;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gAlgo ;
@@ -44,7 +46,16 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public boolean isConnected() {
-        return false;
+        if(this.gAlgo.getV().size()==0 ||this.gAlgo.getV().size()==1)return true;
+        if(this.gAlgo.edgeSize()==0 || this.gAlgo.nodeSize()>this.gAlgo.edgeSize()+1)
+            return false;
+        node_data temp = null;
+        for (node_data node : this.gAlgo.getV()) {
+            temp=node;
+            break;
+        }
+        return this.bfs(temp);
+
     }
 
     /**
@@ -57,7 +68,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public double shortestPathDist(int src, int dest) {
-        return 0;
+        node_data n1 = this.gAlgo.getNode(src);
+        node_data n2 = this.gAlgo.getNode(dest);
+
+        if(n1==null || n2 == null) return -1;
+//        int x = bfs(n1);//////////// הדייאקסטרה שעשית הוא המיטבי לגרף מכוון ממושקל
+        return n2.getTag();
     }
 
     /**
@@ -99,5 +115,56 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     @Override
     public boolean load(String file) {
         return false;
+    }
+
+    public boolean bfs(node_data node){
+        for (node_data n : this.gAlgo.getV()) {
+            n.setTag(-1);
+
+        }
+        int counter = 0;
+        node_data temp = null;
+        Queue<node_data> q = new LinkedList<node_data>() ;
+        q.add(node);
+        node.setTag(1);
+        counter ++;
+        while(!q.isEmpty()){
+            if(q.peek()!=null){
+                temp = q.poll();
+            }
+            for (node_data n2 : this.gAlgo.getV(temp.getKey())) {
+                if (n2.getTag() == -1) {
+                    counter++;
+                    if(this.gAlgo.getV(n2.getKey()).size != 0) {
+                        q.add(n2);
+                        n2.setTag(1);
+                    }
+                }
+            }
+        }
+        if(counter!=gAlgo.getV().size()){
+            return false;
+        }
+        counter = 0;
+        temp = null;
+        q = new LinkedList<node_data>() ;
+        q.add(node);
+        counter ++;
+        while(!q.isEmpty()){
+            if(q.peek()!=null){
+                temp = q.poll();
+            }
+            for (node_data n2 : this.gAlgo.getOV(temp.getKey())) {
+                if (n2.getTag() == 1) {
+                    counter++;
+                    if(this.gAlgo.getOV(n2.getKey()).size != 0) {
+                        q.add(n2);
+                        n2.setTag(2);
+                    }
+                }
+            }
+        }
+        return counter==gAlgo.getV().size();
+
     }
 }
