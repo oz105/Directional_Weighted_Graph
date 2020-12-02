@@ -188,16 +188,20 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                 temp = q.poll();
             }
 //            for (node_data n2 : this.gAlgo.getOV(temp.getKey())) {
-            for (node_data n2 : this.gAlgo.getOV(temp.getKey())) {
-                if (n2.getTag() == 1) {
-                    counter++;
+            if(gAlgo instanceof DWGraph_DS) {
+                for (edge_data e :((DWGraph_DS)(this.gAlgo)).getOV(temp.getKey())) {
+                    node_data n2 = gAlgo.getNode(e.getDest());
+                    if (n2.getTag() == 1) {
+                        counter++;
 //                    if(this.gAlgo.getOV(n2.getKey()).size != 0) {
-                    if(this.gAlgo.getOV(n2.getKey()).size != 0) {
-                        q.add(n2);
-                        n2.setTag(2);
+                        if(((DWGraph_DS)(this.gAlgo)).getOV(n2.getKey()) != null) {
+                            q.add(n2);
+                            n2.setTag(2);
+                        }
                     }
                 }
             }
+
         }
         return counter==gAlgo.getV().size();
 

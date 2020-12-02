@@ -235,8 +235,9 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     }
 
-    public Collection<Integer> getOV (int id){
-        return reverse.get(id).keySet() ;
+    public Collection<edge_data> getOV (int id){
+
+        return reverse.get(id).values() ;
     }
 
 
