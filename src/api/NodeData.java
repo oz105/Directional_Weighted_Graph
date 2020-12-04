@@ -1,10 +1,11 @@
 package api;
 
-public class NodeData implements node_data {
+public class NodeData implements node_data , geo_location {
     private int key;
     private int tag;
     private String info;
     private double weight;
+    private geo_location p ;
 
     //CONSTRUCTOR
     public NodeData(int key) {
@@ -12,6 +13,7 @@ public class NodeData implements node_data {
         this.tag = -1;
         this.info = "";
         this.weight = 0.0;
+
     }
     //COPY CONSTRUCTOR
     public NodeData(node_data n) {
@@ -19,6 +21,7 @@ public class NodeData implements node_data {
         this.tag = n.getTag();
         this.info = n.getInfo();
         this.weight = n.getWeight() ;
+
     }
 
     /**
@@ -39,7 +42,7 @@ public class NodeData implements node_data {
      */
     @Override
     public geo_location getLocation() {
-        return null;
+        return  p ;
     }
 
     /**
@@ -49,7 +52,7 @@ public class NodeData implements node_data {
      */
     @Override
     public void setLocation(geo_location p) {
-
+        this.p = p ;
     }
 
     /**
@@ -112,6 +115,31 @@ public class NodeData implements node_data {
     @Override
     public void setTag(int t) {
         this.tag = t;
+    }
+
+    @Override
+    public double x() {
+        return this.getLocation().x();
+    }
+
+    @Override
+    public double y() {
+        return this.getLocation().y();
+    }
+
+    @Override
+    public double z() {
+        return this.getLocation().z();
+    }
+
+    @Override
+    public double distance(geo_location g) {
+        double res = 0.0 ;
+        double twoX = (this.p.x() - g.x())*(this.p.x() - g.x()) ;
+        double twoY = (this.p.y() - g.y())*(this.p.y() - g.y()) ;
+        double twoZ = (this.p.z() - g.z())*(this.p.z() - g.z()) ;
+        res = twoX + twoY + twoZ ;
+        return Math.sqrt(res) ;
     }
 }
 
