@@ -1,13 +1,21 @@
 package api;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gAlgo ;
 
+    public DWGraph_Algo (){
+        gAlgo= new DWGraph_DS();
+    }
     /**
      * Init the graph on which this set of algorithms operates on.
      *
@@ -130,7 +138,18 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public boolean save(String file) {
-        return false;
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(this.gAlgo);
+//            System.out.println(json);
+            PrintWriter pw = new PrintWriter(new File(file));
+            pw.write(json);
+            pw.close();
+        }
+        catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -144,7 +163,18 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public boolean load(String file) {
-        return false;
+        try {
+            FileReader fileR = new FileReader(file);
+            Gson gson = new Gson();
+
+            this.gAlgo= new DWGraph_DS();
+            this.gAlgo= gson.fromJson(fileR, DWGraph_DS.class);
+        }
+        catch (Exception e){
+            return false;
+        }
+        return true;
+
     }
 
     public boolean bfs(node_data node){
@@ -244,6 +274,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         try { Integer.parseInt(s) ; }
         catch (NumberFormatException e) { return false ; }
         return true ;
+    }
+    public boolean equal(dw_graph_algorithms pa){
+        if(pa != null && this.gAlgo instanceof DWGraph_DS){
+            DWGraph_DS temp = (DWGraph_DS) this.gAlgo;
+            return temp.equal(pa.getGraph());
+        }
+        return false;
     }
 
 }

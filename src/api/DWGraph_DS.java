@@ -1,5 +1,7 @@
 package api;
 
+import com.google.gson.Gson;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,7 +14,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     //CONSTRUCTOR
     public DWGraph_DS() {
-        this.verticesSize = 0;
+//        this.verticesSize = 0;
         this.edgeSize = 0;
         this.modeCount = 0;
         this.verticesOfGraph = new HashMap<Integer, node_data>();
@@ -115,10 +117,10 @@ public class DWGraph_DS implements directed_weighted_graph {
                 this.modeCount++;
             }
             /// Only if we need to update the weight if it is not equal .
-//            else if (edgesOfGraph.get(src).get(dest).getWeight()!= w) {
-//                edgesOfGraph.get(src).get(dest);
-//                this.modeCount++;
-//            }
+            else if (edgesOfGraph.get(src).get(dest).getWeight()!= w) {
+                edgesOfGraph.get(src).get(dest);
+                this.modeCount++;
+            }
         }
     }
     
@@ -238,6 +240,27 @@ public class DWGraph_DS implements directed_weighted_graph {
     public Collection<edge_data> getOV (int id){
 
         return reverse.get(id).values() ;
+    }
+
+    public boolean equal(directed_weighted_graph p){
+        if(p==this) return true;
+        else if(p==null) return false;
+        if(this.edgeSize!= p.edgeSize() || this.verticesOfGraph.size()!=p.getV().size()){
+            return false;
+        }
+        if(p instanceof DWGraph_DS) {
+            DWGraph_DS temp = (DWGraph_DS)p;
+            String thisS = this.toString();
+            String tempS = temp.toString();
+            int comp = thisS.compareTo(tempS);
+            return (comp == 0);
+        }
+        return false;
+    }
+    public String toString(){
+        Gson gson = new Gson();
+        String str = gson.toJson(this);
+        return str;
     }
 
 
