@@ -1,6 +1,8 @@
 package api;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.support.hierarchical.Node;
 
 import java.util.Random;
 
@@ -13,6 +15,7 @@ class DWGraph_AlgoTest {
     public static directed_weighted_graph dwg2= new DWGraph_DS();
     public static dw_graph_algorithms dwga1= new DWGraph_Algo();
     public static dw_graph_algorithms dwga2= new DWGraph_Algo();
+    public static directed_weighted_graph dwgSpecifi= new DWGraph_DS();
     static int seed = 31;
     static int v_size = 10;
     static int e_size = v_size*3;
@@ -20,9 +23,43 @@ class DWGraph_AlgoTest {
 //    static src.ex1.src.directed_weighted_graph g0 = new src.ex1.src.WGraph_DS(), g1;
 //    static src.ex1.src.directed_weighted_graph_algorithms ga;
 
+
+    @BeforeEach
     public directed_weighted_graph wgSpecific(){
-        //צריך לעשות ספציפי אחד כמו מה שנעשה בטסט של הגרף
-        return null;
+        for (int i = 0; i < 12 ; i++) {
+            NodeData n = new NodeData() ;
+            dwgSpecifi.addNode(n);
+        }
+        dwgSpecifi.connect(0,1,3);
+        dwgSpecifi.connect(0,3,2);
+
+        dwgSpecifi.connect(1,4,1);
+
+        dwgSpecifi.connect(2,6,3);
+
+        dwgSpecifi.connect(3,5,1);
+
+        dwgSpecifi.connect(4,1,1);
+        dwgSpecifi.connect(4,11,3);
+        dwgSpecifi.connect(4,7,2);
+
+        dwgSpecifi.connect(5,10,3);
+        dwgSpecifi.connect(5,11,2);
+        dwgSpecifi.connect(5,9,2);
+
+        dwgSpecifi.connect(6,7,2);
+
+        dwgSpecifi.connect(7,9,1);
+
+        dwgSpecifi.connect(8,3,4);
+
+        dwgSpecifi.connect(9,11,1);
+        dwgSpecifi.connect(9,4,2);
+
+        dwgSpecifi.connect(10,8,1);
+
+        dwgSpecifi.connect(11,6,3); // 18 Edges
+        return dwgSpecifi ;
     }
 
     public directed_weighted_graph wgEmpty(int nodes, directed_weighted_graph dwgTemp) {
@@ -172,5 +209,4 @@ class DWGraph_AlgoTest {
         double ans = d*dx+min;
         return ans;
     }
-}
 }

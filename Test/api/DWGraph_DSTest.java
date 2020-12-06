@@ -1,5 +1,6 @@
 package api;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -15,6 +16,30 @@ class DDWGraph_DSTest {
     static int v_size = 10;
     static int e_size = v_size * 3;
     static Random _rnd = new Random(seed);
+
+    private directed_weighted_graph emptyGraph;
+    private directed_weighted_graph g;
+
+    @BeforeEach
+    void setupGraphs(){
+        emptyGraph = new DWGraph_DS() ;
+        g=new DWGraph_DS();
+        for(int i=0;i< 11;i++){
+            NodeData n = new NodeData() ;
+            g.addNode(n);
+        }
+        g.connect(1,8,5);
+        g.connect(1,3,2);
+        g.connect(1,10,1);
+        g.connect(3,9,4);
+        g.connect(9,10,3);
+        g.connect(3,6,3);
+        g.connect(7,8,2);
+        g.connect(2,6,3);
+        g.connect(2,4,2);
+        g.connect(4,5,1);
+
+    }
 
 
     public directed_weighted_graph wgEmpty(int nodes, directed_weighted_graph dwgTemp) {
@@ -101,18 +126,57 @@ class DDWGraph_DSTest {
 
     @Test
     void getNode() {
+        System.out.println(g.getNode(1).getKey());
+        assertAll(" ",
+                () -> assertEquals(null, emptyGraph.getNode(0), "should be null"),
+                () -> assertEquals(null, emptyGraph.getNode(1), "should be null"),
+                () -> assertEquals(null, emptyGraph.getNode(2), "should be null"),
+                () -> assertEquals(1, g.getNode(1).getKey(), "should be 1"),
+                () -> assertEquals(2, g.getNode(2).getKey(), "should be 2"),
+                () -> assertEquals(3, g.getNode(3).getKey(), "should be 3"),
+                () -> assertNotEquals(9, g.getNode(8).getKey(), "should not be 9"),
+                () -> assertNotEquals(0, g.getNode(1).getKey(), "should not be 0"),
+                () -> assertNotEquals(1, g.getNode(2).getKey(), "should not be 1")
+        );
     }
 
     @Test
     void getEdge() {
+        assertAll(
+                () -> assertEquals(null, emptyGraph.getEdge(0, 1), "should not be edge its empty graph should return -1"),
+                () -> assertEquals(null, emptyGraph.getEdge(1, 2), "should not be edge its empty graph should return -1"),
+                () -> assertEquals(null, emptyGraph.getEdge(2, 3), "should not be edge its empty graph should return -1"),
+                () -> assertEquals(5, g.getEdge(1, 8).getWeight()),
+                () -> assertEquals(2, g.getEdge(2, 4).getWeight()),
+                () -> assertEquals(3, g.getEdge(2, 6).getWeight()),
+                () -> assertEquals(3, g.getEdge(3, 6).getWeight()),
+                () -> assertNotEquals(5, g.getEdge(3, 9).getWeight()),
+                () -> assertNotEquals(4, g.getEdge(9, 10).getWeight())
+        );
     }
 
     @Test
     void addNode() {
+        assertEquals(11, g.nodeSize());
+        NodeData n = new NodeData() ;
+        g.addNode(n);
+        assertEquals(12, g.nodeSize());
+        for (int i = 0; i < 4 ; i++) {
+            n = new NodeData() ;
+            g.addNode(n);
+        }
+        assertNotEquals(13, g.nodeSize());
+        assertEquals(16, g.nodeSize());
     }
 
     @Test
     void connect() {
+
+
+
+
+
+
     }
 
 
@@ -122,7 +186,7 @@ class DDWGraph_DSTest {
         assertEquals(v_size, wg1.nodeSize());
 
         for(int i=0; i<v_size; i++){
-            node_data temp = wg1.getNode(i);
+            node_data temp = DDWGraph_DSTest.wg1.getNode(i);
             boolean b = temp ==null;
             assertFalse(b);
         }
@@ -137,9 +201,9 @@ class DDWGraph_DSTest {
         wg1 =wgWhole(v_size, wg1);
         int key = nextRnd(0, v_size-1);
         node_data removedNode = wg1.getNode(key);
-        node_data temp = wg1.removeNode(key);
+        node_data temp = DDWGraph_DSTest.wg1.removeNode(key);
         assertEquals(removedNode, temp);
-        boolean b = (wg1.getNode(key)==null);
+        boolean b = (DDWGraph_DSTest.wg1.getNode(key)==null);
         assertTrue(b);
     }
 
@@ -174,16 +238,16 @@ class DDWGraph_DSTest {
 
         tempMC = wg1.getMC();
         node_data temp = new NodeData(v_size);
-        wg1.addNode(temp);
-        assertNotEquals(tempMC, wg1.getMC());
+        DDWGraph_DSTest.wg1.addNode(temp);
+        assertNotEquals(tempMC, DDWGraph_DSTest.wg1.getMC());
 
-        tempMC = wg1.getMC();
-        wg1.removeEdge(0, v_size-1);
-        assertNotEquals(tempMC, wg1.getMC());
+        tempMC = DDWGraph_DSTest.wg1.getMC();
+        DDWGraph_DSTest.wg1.removeEdge(0, v_size-1);
+        assertNotEquals(tempMC, DDWGraph_DSTest.wg1.getMC());
 
-        tempMC = wg1.getMC();
-        wg1.removeNode( v_size);
-        assertNotEquals(tempMC, wg1.getMC());
+        tempMC = DDWGraph_DSTest.wg1.getMC();
+        DDWGraph_DSTest.wg1.removeNode( v_size);
+        assertNotEquals(tempMC, DDWGraph_DSTest.wg1.getMC());
     }
 
     @Test
@@ -202,20 +266,20 @@ class DDWGraph_DSTest {
     void testEqual() {
         wg1 =wgEmpty(v_size, wg1);
         wg2 =wgEmpty(v_size, wg2);
-        boolean b = wg2.equals((DWGraph_DS)wg1);
+        boolean b = wg2.equals((DWGraph_DS) wg1);
         assertTrue(b);
         wg2.removeNode(1);
-        b=wg2.equals((DWGraph_DS)wg1);
+        b=wg2.equals((DWGraph_DS) wg1);
         assertFalse(b);
 
         wg1 =wgWhole(v_size, wg1);
         wg2 =wgWhole(v_size, wg2);
-        b = wg2.equals((DWGraph_DS)wg1);
+        b = wg2.equals((DWGraph_DS) wg1);
         assertTrue(b);
         int a = nextRnd(1, v_size);
 
         wg2.removeEdge(0,a );
-        b=wg2.equals((DWGraph_DS)wg1);
+        b=wg2.equals((DWGraph_DS) wg1);
         assertFalse(b);
     }
 

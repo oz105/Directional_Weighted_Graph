@@ -38,15 +38,14 @@ public class DWGraph_DS implements directed_weighted_graph {
         }
         for (node_data node : copyG.getV()) {
             for (edge_data e : copyG.getE(node.getKey())) {
-                edge_data copyE = new EdgeData(e) ;
-                this.connect(copyE.getSrc(),copyE.getDest(),copyE.getWeight());
+                edge_data copyE = new EdgeData(e);
+                this.connect(copyE.getSrc(), copyE.getDest(), copyE.getWeight());
             }
         }
         this.verticesSize = copyG.nodeSize();
         this.edgeSize = copyG.edgeSize();
         this.modeCount = copyG.getMC();
     }
-
 
 
     /**
@@ -88,8 +87,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     @Override
     public void addNode(node_data n) {
         if (!(verticesOfGraph.containsKey(n.getKey()))) {
-            node_data addedNode = new NodeData(n.getKey());
-            verticesOfGraph.put(n.getKey(), addedNode);
+            verticesOfGraph.put(n.getKey(), n);
             HashMap tempMap = new HashMap<Integer, edge_data>();
             HashMap tempMap2 = new HashMap<Integer, edge_data>();
             edgesOfGraph.put(n.getKey(), tempMap);
@@ -110,21 +108,22 @@ public class DWGraph_DS implements directed_weighted_graph {
     @Override
     public void connect(int src, int dest, double w) {
         if (src != dest) {
-            if (verticesOfGraph.containsKey(src) && !(edgesOfGraph.get(src).containsKey(dest))) {
-                edge_data addedEdge = new EdgeData(src , dest , w) ;
-                this.edgesOfGraph.get(src).put(dest, addedEdge );
-                this.reverse.get(dest).put(src, addedEdge );
+            if (verticesOfGraph.containsKey(src) && verticesOfGraph.containsKey(dest)
+                    && !(edgesOfGraph.get(src).containsKey(dest))) {
+                edge_data addedEdge = new EdgeData(src, dest, w);
+                this.edgesOfGraph.get(src).put(dest, addedEdge);
+                this.reverse.get(dest).put(src, addedEdge);
                 this.edgeSize++;
                 this.modeCount++;
-            }
-            /// Only if we need to update the weight if it is not equal .
-            else if (edgesOfGraph.get(src).get(dest).getWeight()!= w) {
-                edgesOfGraph.get(src).get(dest);
-                this.modeCount++;
+                /// Only if we need to update the weight if it is not equal .
+                if (edgesOfGraph.get(src).get(dest).getWeight() != w) {
+                    edgesOfGraph.get(src).get(dest);
+                    this.modeCount++;
+                }
             }
         }
     }
-    
+
     /**
      * This method returns a pointer (shallow copy) for the
      * collection representing all the nodes in the graph.
@@ -148,10 +147,10 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public Collection<edge_data> getE(int node_id) {
-        if(edgesOfGraph.containsKey(node_id)){
+        if (edgesOfGraph.containsKey(node_id)) {
             return edgesOfGraph.get(node_id).values();
         }
-        return null ;
+        return null;
     }
 
     /**
@@ -165,18 +164,18 @@ public class DWGraph_DS implements directed_weighted_graph {
     @Override
     //Need to check this.
     public node_data removeNode(int key) {
-        if (verticesOfGraph.containsKey(key)){
-            int num_of_edges =  edgesOfGraph.get(key).values().size() ;
+        if (verticesOfGraph.containsKey(key)) {
+            int num_of_edges = edgesOfGraph.get(key).values().size();
             edgesOfGraph.remove(key);
-            verticesSize -- ;
-            edgeSize -= num_of_edges ;
-            for (Integer id : reverse.get(key).keySet()){
-                edgesOfGraph.get(id).remove(key) ;
-                reverse.get(key).remove(id) ;
-                edgeSize -- ;
+            verticesSize--;
+            edgeSize -= num_of_edges;
+            for (Integer id : reverse.get(key).keySet()) {
+                edgesOfGraph.get(id).remove(key);
+                reverse.get(key).remove(id);
+                edgeSize--;
             }
-            modeCount ++ ;
-            reverse.remove(key) ;
+            modeCount++;
+            reverse.remove(key);
             return verticesOfGraph.remove(key);
         }
         return null;
@@ -192,11 +191,11 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public edge_data removeEdge(int src, int dest) {
-        if(edgesOfGraph.containsKey(src) && edgesOfGraph.get(src).containsKey(dest)){
+        if (edgesOfGraph.containsKey(src) && edgesOfGraph.get(src).containsKey(dest)) {
             edgesOfGraph.get(src).remove(dest);
             reverse.get(dest).remove(src);
-            edgeSize -- ;
-            modeCount ++ ;
+            edgeSize--;
+            modeCount++;
         }
         return null;
     }
@@ -233,14 +232,14 @@ public class DWGraph_DS implements directed_weighted_graph {
         return this.modeCount;
     }
 
-    public Collection<Integer> getV (int id){
-        return edgesOfGraph.get(id).keySet() ;
+    public Collection<Integer> getV(int id) {
+        return edgesOfGraph.get(id).keySet();
 
     }
 
-    public Collection<edge_data> getOV (int id){
+    public Collection<edge_data> getOV(int id) {
 
-        return reverse.get(id).values() ;
+        return reverse.get(id).values();
     }
 
     //equals with override when we will use assert equals
@@ -255,14 +254,14 @@ public class DWGraph_DS implements directed_weighted_graph {
                 Objects.equals(verticesOfGraph, that.verticesOfGraph);
     }
 
-    public boolean equal(directed_weighted_graph p){
-        if(p==this) return true;
-        else if(p==null) return false;
-        if(this.edgeSize!= p.edgeSize() || this.verticesOfGraph.size()!=p.getV().size()){
+    public boolean equal(directed_weighted_graph p) {
+        if (p == this) return true;
+        else if (p == null) return false;
+        if (this.edgeSize != p.edgeSize() || this.verticesOfGraph.size() != p.getV().size()) {
             return false;
         }
-        if(p instanceof DWGraph_DS) {
-            DWGraph_DS temp = (DWGraph_DS)p;
+        if (p instanceof DWGraph_DS) {
+            DWGraph_DS temp = (DWGraph_DS) p;
             String thisS = this.toString();
             String tempS = temp.toString();
             int comp = thisS.compareTo(tempS);
@@ -270,7 +269,8 @@ public class DWGraph_DS implements directed_weighted_graph {
         }
         return false;
     }
-    public String toString(){
+
+    public String toString() {
         Gson gson = new Gson();
         String str = gson.toJson(this);
         return str;
