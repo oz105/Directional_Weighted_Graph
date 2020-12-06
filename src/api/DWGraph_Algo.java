@@ -3,10 +3,8 @@ package api;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -192,12 +190,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             if(q.peek()!=null){
                 temp = q.poll();
             }
-//            for (node_data n2 : this.gAlgo.getV(temp.getKey())) {
             for (edge_data e : this.gAlgo.getE(temp.getKey())) {
                 node_data n2 = gAlgo.getNode(e.getDest());
                 if (n2.getTag() == -1) {
                     counter++;
-//                    if(this.gAlgo.getV(n2.getKey()).size != 0) {
                     if(this.gAlgo.getE(n2.getKey()) != null) {
                         q.add(n2);
                         n2.setTag(1);
@@ -217,13 +213,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             if(q.peek()!=null){
                 temp = q.poll();
             }
-//            for (node_data n2 : this.gAlgo.getOV(temp.getKey())) {
             if(gAlgo instanceof DWGraph_DS) {
                 for (edge_data e :((DWGraph_DS)(this.gAlgo)).getOV(temp.getKey())) {
                     node_data n2 = gAlgo.getNode(e.getDest());
                     if (n2.getTag() == 1) {
                         counter++;
-//                    if(this.gAlgo.getOV(n2.getKey()).size != 0) {
                         if(((DWGraph_DS)(this.gAlgo)).getOV(n2.getKey()) != null) {
                             q.add(n2);
                             n2.setTag(2);
@@ -281,6 +275,15 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             return temp.equal(pa.getGraph());
         }
         return false;
+    }
+
+    //equals with override when we will use assert equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DWGraph_Algo that = (DWGraph_Algo) o;
+        return Objects.equals(gAlgo, that.gAlgo);
     }
 
 }

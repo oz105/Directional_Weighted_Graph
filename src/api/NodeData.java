@@ -128,9 +128,7 @@ public class NodeData implements node_data , geo_location {
     }
 
     @Override
-    public double z() {
-        return this.getLocation().z();
-    }
+    public double z() { return this.getLocation().z(); }
 
     @Override
     public double distance(geo_location g) {

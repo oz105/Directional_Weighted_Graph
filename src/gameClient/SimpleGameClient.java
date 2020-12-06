@@ -1,9 +1,4 @@
 //package gameClient;
-//<<<<<<< HEAD
-//
-//import Server.Agent_Graph_Algo;
-//=======
-//>>>>>>> 2f12736a083a7ca63b4def9b5e945f2ab287759d
 //import Server.Game_Server_Ex2;
 //import api.directed_weighted_graph;
 //import api.edge_data;
@@ -40,14 +35,8 @@
 //		int i=0;
 //		while(game.isRunning()) {
 //			long t = game.timeToEnd();
-//<<<<<<< HEAD
-//		//	System.out.println("round: "+i+"  seconds to end:"+(t/1000));
-//			String lg = game.move();
-//			List<CL_Agent> log = Agent_Graph_Algo.getAgents(lg, gg);
-//=======
 //			String lg = game.move();
 //			List<CL_Agent> log = Arena.getAgents(lg, gg);
-//>>>>>>> 2f12736a083a7ca63b4def9b5e945f2ab287759d
 //			for(int a=0;a< log.size();a++) {
 //				CL_Agent r = log.get(a);
 //				int dest = r.getNextNode();

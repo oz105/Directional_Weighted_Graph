@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class DWGraph_DS implements directed_weighted_graph {
     private HashMap<Integer, HashMap<Integer, edge_data>> edgesOfGraph;
@@ -240,6 +241,18 @@ public class DWGraph_DS implements directed_weighted_graph {
     public Collection<edge_data> getOV (int id){
 
         return reverse.get(id).values() ;
+    }
+
+    //equals with override when we will use assert equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DWGraph_DS that = (DWGraph_DS) o;
+        return verticesSize == that.verticesSize &&
+                edgeSize == that.edgeSize &&
+                Objects.equals(edgesOfGraph, that.edgesOfGraph) &&
+                Objects.equals(verticesOfGraph, that.verticesOfGraph);
     }
 
     public boolean equal(directed_weighted_graph p){
