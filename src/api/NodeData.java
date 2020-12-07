@@ -16,16 +16,6 @@ public class NodeData implements node_data , geo_location {
         this.info = "";
         this.weight = 0.0;
     }
-    public NodeData(int key) {
-        if(key>= keyMaker) {
-            this.key = key;
-            this.tag = -1;
-            this.info = "";
-            this.weight = 0.0;
-            keyMaker= key+1;
-        }
-
-    }
     //COPY CONSTRUCTOR
     public NodeData(node_data n) {
         this.key = n.getKey();

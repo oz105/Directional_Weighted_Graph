@@ -26,9 +26,11 @@ class DWGraph_AlgoTest {
 
     @BeforeEach
     public directed_weighted_graph wgSpecific(){
+        int theKey = 0 ;
         for (int i = 0; i < 12 ; i++) {
             NodeData n = new NodeData() ;
             dwgSpecifi.addNode(n);
+            theKey = n.getKey() ; 
         }
         dwgSpecifi.connect(0,1,3);
         dwgSpecifi.connect(0,3,2);
@@ -65,7 +67,7 @@ class DWGraph_AlgoTest {
     public directed_weighted_graph wgEmpty(int nodes, directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
         for (int i = 0; i < nodes; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData();
             dwgTemp.addNode(temp);
         }
         return dwgTemp;
@@ -75,7 +77,7 @@ class DWGraph_AlgoTest {
     wgWhole(int nodes, directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
         for (int i = 0; i < nodes; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData();
             dwgTemp.addNode(temp);
         }
         for (int i = 0; i < nodes - 1; i++) {
@@ -156,11 +158,11 @@ class DWGraph_AlgoTest {
     }
     @Test
     void save(){
-        node_data node0 = new NodeData(0);
+        node_data node0 = new NodeData();
         dwg1.addNode(node0);
-        node_data node1 = new NodeData(1);
+        node_data node1 = new NodeData();
         dwg1.addNode(node1);
-        node_data node2 = new NodeData(2);
+        node_data node2 = new NodeData();
         dwg1.addNode(node2);
         dwg1.connect(0, 1, 0.1);
         dw_graph_algorithms dwga = new DWGraph_Algo();

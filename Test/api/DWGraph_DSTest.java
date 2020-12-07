@@ -16,6 +16,7 @@ class DDWGraph_DSTest {
     static int v_size = 10;
     static int e_size = v_size * 3;
     static Random _rnd = new Random(seed);
+    public static int keyCount = 0 ;
 
     private directed_weighted_graph emptyGraph;
     private directed_weighted_graph g;
@@ -45,7 +46,7 @@ class DDWGraph_DSTest {
     public directed_weighted_graph wgEmpty(int nodes, directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
         for (int i = 0; i < nodes; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData() ;
             dwgTemp.addNode(temp);
         }
         return dwgTemp;
@@ -54,15 +55,18 @@ class DDWGraph_DSTest {
     public directed_weighted_graph
     wgWhole(int nodes, directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
+        int key = 0  ;
         for (int i = 0; i < nodes; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData ();
             dwgTemp.addNode(temp);
+            key = temp.getKey() ;
         }
-        for (int i = 0; i < nodes - 1; i++) {
-            for (int j = i + 1; j < nodes; j++) {
-                dwgTemp.connect(i, j, 5);
-            }
+        key = key - (nodes-1) ;
+        for (int i = 0; i < nodes ; i++) {
+            for (int j = 0; j < nodes; j++) {
+                dwgTemp.connect(key+i, key+j, 5);
 
+            }
         }
         return dwgTemp;
     }
@@ -103,7 +107,7 @@ class DDWGraph_DSTest {
     public directed_weighted_graph wgSpecific(directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
         for (int i = 0; i < 11; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData();
             dwgTemp.addNode(temp);
         }
         dwgTemp.connect(0, 3, 1);
@@ -171,29 +175,44 @@ class DDWGraph_DSTest {
 
     @Test
     void connect() {
-
-
-
-
-
-
-    }
-
-
-    @Test
-    void getV() {
-        wg1 = wgEmpty(v_size, wg1);
-        assertEquals(v_size, wg1.nodeSize());
-
-        for(int i=0; i<v_size; i++){
-            node_data temp = DDWGraph_DSTest.wg1.getNode(i);
-            boolean b = temp ==null;
-            assertFalse(b);
+        wg1  = wgWhole(5 , wg1) ;
+        int numOfEdges = 0 ;
+        wg1.connect(1, 1, 1);
+        assertEquals(null, wg1.getEdge(1, 1));
+        wg1.connect(12, 13, 2);
+        assertEquals(5, wg1.getEdge(12, 13).getWeight());
+        assertNotEquals(1, wg1.getEdge(12, 13).getWeight());
+        wg1.connect(13, 13, 0);
+        assertEquals(null, wg1.getEdge(13, 13));
+        assertNotEquals(1, wg1.getEdge(13, 14).getWeight());
+        numOfEdges = wg1.edgeSize();
+        wg1.connect(12,15,1);
+        assertEquals( 20 , numOfEdges);
+        try {
+            emptyGraph.connect(1, 2, 1);
+            wg1.connect(3, 5, 0);
+        } catch (NullPointerException e) {
+            System.out.println("this is empty graph no need to enter the function");
+            e.printStackTrace();
         }
     }
 
     @Test
+    void getV() {
+        int counterNodes = 0 ;
+        wg1 = wgEmpty(v_size, wg1);
+        assertEquals(v_size, wg1.nodeSize());
+        for (node_data n : wg1.getV()){
+            counterNodes ++ ;
+        }
+        assertEquals(10, counterNodes);
+    }
+
+    @Test
     void getE() {
+
+
+
     }
 
     @Test
@@ -209,6 +228,8 @@ class DDWGraph_DSTest {
 
     @Test
     void removeEdge() {
+
+
     }
 
     @Test
@@ -237,7 +258,7 @@ class DDWGraph_DSTest {
         assertNotEquals(tempMC, wg1.getMC());
 
         tempMC = wg1.getMC();
-        node_data temp = new NodeData(v_size);
+        node_data temp = new NodeData();
         DDWGraph_DSTest.wg1.addNode(temp);
         assertNotEquals(tempMC, DDWGraph_DSTest.wg1.getMC());
 
@@ -260,6 +281,7 @@ class DDWGraph_DSTest {
 
     @Test
     void testEquals() {
+
     }
 
     @Test

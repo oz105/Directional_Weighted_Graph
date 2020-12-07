@@ -12,7 +12,7 @@ public class DWGraph_AlgoTest {
     public directed_weighted_graph wgSpecific(directed_weighted_graph dwg) {
         dwg = new DWGraph_DS();
         for (int i = 0; i < 11; i++) {
-            node_data temp = new NodeData(i);
+            node_data temp = new NodeData();
             dwg.addNode(temp);
         }
         dwg.connect(0, 3, 1);
@@ -33,11 +33,11 @@ public class DWGraph_AlgoTest {
     }
     @Test
     void save(){
-        node_data node0 = new NodeData(0);
+        node_data node0 = new NodeData();
         dwg1.addNode(node0);
-        node_data node1 = new NodeData(1);
+        node_data node1 = new NodeData();
         dwg1.addNode(node1);
-        node_data node2 = new NodeData(2);
+        node_data node2 = new NodeData();
         dwg1.addNode(node2);
         dwg1.connect(0, 1, 0.1);
         dw_graph_algorithms dwga = new DWGraph_Algo();

@@ -15,7 +15,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     //CONSTRUCTOR
     public DWGraph_DS() {
-//        this.verticesSize = 0;
+        this.verticesSize = 0;
         this.edgeSize = 0;
         this.modeCount = 0;
         this.verticesOfGraph = new HashMap<Integer, node_data>();
@@ -106,18 +106,14 @@ public class DWGraph_DS implements directed_weighted_graph {
      * @param w    - positive weight representing the cost (aka time, price, etc) between src-->dest.
      */
     @Override
-    public void connect(int src, int dest, double w) {
+    public void connect(int src, int dest, double w) { //we dont change the weight of the edge.
         if (src != dest) {
-            if (verticesOfGraph.containsKey(src) && verticesOfGraph.containsKey(dest)
-                    && !(edgesOfGraph.get(src).containsKey(dest))) {
-                edge_data addedEdge = new EdgeData(src, dest, w);
-                this.edgesOfGraph.get(src).put(dest, addedEdge);
-                this.reverse.get(dest).put(src, addedEdge);
-                this.edgeSize++;
-                this.modeCount++;
-                /// Only if we need to update the weight if it is not equal .
-                if (edgesOfGraph.get(src).get(dest).getWeight() != w) {
-                    edgesOfGraph.get(src).get(dest);
+            if (verticesOfGraph.containsKey(src) && verticesOfGraph.containsKey(dest)) {
+                if(!(edgesOfGraph.get(src).containsKey(dest))){
+                    edge_data addedEdge = new EdgeData(src, dest, w);
+                    this.edgesOfGraph.get(src).put(dest, addedEdge);
+                    this.reverse.get(dest).put(src, addedEdge);
+                    this.edgeSize++;
                     this.modeCount++;
                 }
             }
