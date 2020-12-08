@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 public class NodeData implements node_data , geo_location {
     private int key;
     private int tag;
@@ -24,6 +26,7 @@ public class NodeData implements node_data , geo_location {
         this.weight = n.getWeight() ;
 
     }
+
 
     /**
      * Returns the key (id) associated with this node.
@@ -139,6 +142,19 @@ public class NodeData implements node_data , geo_location {
         double twoZ = (this.p.z() - g.z())*(this.p.z() - g.z()) ;
         res = twoX + twoY + twoZ ;
         return Math.sqrt(res) ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NodeData nodeData = (NodeData) o;
+        return key == nodeData.key;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
     }
 }
 

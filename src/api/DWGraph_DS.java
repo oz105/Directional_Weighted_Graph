@@ -28,13 +28,14 @@ public class DWGraph_DS implements directed_weighted_graph {
         double weight = 0.0;
         this.verticesOfGraph = new HashMap<Integer, node_data>();
         this.edgesOfGraph = new HashMap<Integer, HashMap<Integer, edge_data>>();
+        this.reverse = new HashMap<Integer, HashMap<Integer, edge_data>>();
         for (node_data node : copyG.getV()) {
             node_data tempNode = new NodeData(node);
             this.verticesOfGraph.put(tempNode.getKey(), tempNode);
-            HashMap tempMap = new HashMap<node_data, edge_data>();
-            HashMap tempMap2 = new HashMap<node_data, edge_data>();
+            HashMap tempMap = new HashMap<Integer, edge_data>();
+            HashMap tempMap2 = new HashMap<Integer, edge_data>();
             this.edgesOfGraph.put(node.getKey(), tempMap);
-            this.reverse.put(node.getKey(), tempMap);
+            this.reverse.put(node.getKey(), tempMap2);
         }
         for (node_data node : copyG.getV()) {
             for (edge_data e : copyG.getE(node.getKey())) {
