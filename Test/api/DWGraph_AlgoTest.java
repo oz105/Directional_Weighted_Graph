@@ -73,16 +73,50 @@ class DWGraph_AlgoTest {
         assertNotEquals(emptyGraph, deepCopyG);
     }
 
+    // need to check is connected not work
+    //try on 5 full graph and still return false.
     @Test
     void isConnected() {
+        for (int i = 3; i <8 ; i++) {
+            setupFullGraph(i) ;
+            algo.init(fullGraph);
+            assertTrue(algo.isConnected());
+        }
     }
 
     @Test
     void shortestPathDist() {
+        algo.init(dwgSpecifi);
+        double _two = algo.shortestPathDist(9 , 4 ) ;
+        double _three = algo.shortestPathDist(4 , 11 ) ;
+        double _five = algo.shortestPathDist(0 , 11 ) ;
+        double _fiveAgain = algo.shortestPathDist(11 , 0 ) ;
+        double _eight = algo.shortestPathDist(11 , 4 ) ;
+        double _ten = algo.shortestPathDist(8,1) ;
+        double _zero = algo.shortestPathDist(7,7);
+        algo.init(emptyGraph);
+        double empty = algo.shortestPathDist(0,2) ;
+        assertAll(
+                () -> assertEquals(0, _zero, "the weight should be 0 "),
+                () -> assertEquals(2, _two, "the weight should be 2"),
+                () -> assertEquals(3, _three, "the weight should be 4"),
+                () -> assertEquals(5, _five, "the weight should be 5"),
+                () -> assertEquals(5, _fiveAgain , "the weight should be 5"),
+                () -> assertEquals(8,_eight, "the weight should be 8"),
+                () -> assertEquals(10, _ten, "there is no Path"),
+                () -> assertEquals(-1,empty, "there is no Path , empty graph")
+        );
+        for (int i = 3; i <8 ; i++) {
+            int keyNum = 0 ;
+            keyNum = setupFullGraph(i) ;
+            algo.init(fullGraph);
+            assertEquals(1,algo.shortestPathDist(keyNum , keyNum+1));
+        }
     }
 
     @Test
     void shortestPath() {
+
     }
     @Test
     void save(){
@@ -107,21 +141,6 @@ class DWGraph_AlgoTest {
         DWGraph_Algo temp = (DWGraph_Algo)dwga1;
         boolean b = temp.equal(dwga2);
         assertTrue(b);
-    }
-    @Test
-    void bfs() {
-    }
-
-    @Test
-    void dijkstra() {
-    }
-
-    @Test
-    void numberOrNot() {
-    }
-
-    @Test
-    void equal() {
     }
 
     @Test
@@ -161,6 +180,8 @@ class DWGraph_AlgoTest {
         dwgSpecifi.connect(5,9,2);
 
         dwgSpecifi.connect(6,7,2);
+        dwgSpecifi.connect(6,0,2);
+
 
         dwgSpecifi.connect(7,9,1);
 
@@ -269,7 +290,7 @@ class DWGraph_AlgoTest {
         double ans = d*dx+min;
         return ans;
     }
-    directed_weighted_graph setupFullGraph(int fullSize){
+    public static int setupFullGraph(int fullSize){
         fullGraph=new DWGraph_DS();
         int keyNum = 0 ;
         for(int i=0;i<fullSize; i++){
@@ -283,6 +304,6 @@ class DWGraph_AlgoTest {
                 fullGraph.connect(i,j,1);
             }
         }
-        return fullGraph;
+        return keyNum;
     }
 }

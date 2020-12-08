@@ -110,7 +110,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     public void connect(int src, int dest, double w) { //we dont change the weight of the edge.
         if (src != dest) {
             if (verticesOfGraph.containsKey(src) && verticesOfGraph.containsKey(dest)) {
-                if(!(edgesOfGraph.get(src).containsKey(dest))){
+                if (!(edgesOfGraph.get(src).containsKey(dest))) {
                     edge_data addedEdge = new EdgeData(src, dest, w);
                     this.edgesOfGraph.get(src).put(dest, addedEdge);
                     this.reverse.get(dest).put(src, addedEdge);
@@ -267,13 +267,25 @@ public class DWGraph_DS implements directed_weighted_graph {
         return false;
     }
 
+//    public String toString() {
+//        Gson gson = new Gson();
+//        String str = gson.toJson(this);
+//        return str;
+//    }
+
+    @Override
     public String toString() {
-        Gson gson = new Gson();
-        String str = gson.toJson(this);
-        return str;
+        String str = "";
+        for (Integer x : edgesOfGraph.keySet()) {
+            str += "" + x + "{ " + x + " }--> [";
+            for (Integer i : edgesOfGraph.get(x).keySet()) {
+                str += i + " -> weight: " + edgesOfGraph.get(x).get(i).getWeight()+", ";
+            }
+            str += "] \n";
+        }
+
+        return str += "}" ;
     }
-
-
 }
 
 

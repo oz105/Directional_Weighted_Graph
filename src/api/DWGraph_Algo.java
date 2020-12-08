@@ -79,7 +79,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             if(src==dest) return 0 ;
             Dijkstra(gAlgo.getNode(src));
             if(gAlgo.getNode(dest).getWeight() != Integer.MAX_VALUE){
-                return gAlgo.getNode(dest).getTag() ;
+                return gAlgo.getNode(dest).getWeight() ;
             }
         }
         return -1 ;
@@ -234,14 +234,16 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         double weight = 0 ;
         int countVisit = 0;
         node_data tempKey ;
-        PriorityQueue<node_data> PQ = new PriorityQueue<node_data>(new node_dataCompereByTag());
+        PriorityQueue<node_data> PQ = new PriorityQueue<node_data>(new node_dataCompereByWeight());
         for (node_data n : gAlgo.getV()) {
             n.setWeight(Integer.MAX_VALUE);
             n.setInfo("");
+            n.setTag(-1);
         }
         if(gAlgo.getNode(src.getKey()) != null ) {
             src.setWeight(0);
             src.setInfo(""+src.getKey());
+            src.setTag(1);
             PQ.add(src) ;
             countVisit ++ ;
         }
@@ -252,10 +254,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                     for (edge_data e : gAlgo.getE(tempKey.getKey())) {
                         node_data n = gAlgo.getNode(e.getDest());
                         weight = tempKey.getWeight() + (gAlgo.getEdge(tempKey.getKey(),n.getKey()).getWeight()) ;
-                        if(!(NumberOrNot(n.getInfo())) || n.getWeight() > weight ) {
+                        if( (n.getTag()< 0) || n.getWeight() > weight ) {
                             PQ.add(n) ;
                             n.setWeight(weight);
                             n.setInfo(""+tempKey.getKey());
+                            n.setTag(1);
                             countVisit ++ ;
                         }
                     }
@@ -264,11 +267,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
         return countVisit ;
     }
-    public boolean NumberOrNot (String s) {
-        try { Integer.parseInt(s) ; }
-        catch (NumberFormatException e) { return false ; }
-        return true ;
-    }
+
     public boolean equal(dw_graph_algorithms pa){
         if(pa != null && this.gAlgo instanceof DWGraph_DS){
             DWGraph_DS temp = (DWGraph_DS) this.gAlgo;

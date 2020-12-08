@@ -2,7 +2,7 @@ package api;
 
 import java.util.Objects;
 
-public class NodeData implements node_data , geo_location {
+public class NodeData implements node_data ,  geo_location {
     private int key;
     private int tag;
     private String info;
@@ -155,6 +155,12 @@ public class NodeData implements node_data , geo_location {
     @Override
     public int hashCode() {
         return Objects.hash(key);
+    }
+
+
+    @Override
+    public String toString() {
+        return "{"+ key + '}';
     }
 }
 
