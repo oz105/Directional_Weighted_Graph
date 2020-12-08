@@ -1,14 +1,15 @@
 package api;
-
+import gameClient.util.Point3D;
 import java.util.Objects;
 
-public class NodeData implements node_data ,  geo_location {
+public class NodeData implements node_data  {
     private int key;
     private int tag;
     private String info;
     private double weight;
-    private geo_location p ;
+    private geo_location position ;
     private static int keyMaker=0;
+
 
     //CONSTRUCTOR
     public NodeData() {
@@ -17,6 +18,7 @@ public class NodeData implements node_data ,  geo_location {
         this.tag = -1;
         this.info = "";
         this.weight = 0.0;
+        position = new Point3D(0,0,0) ;
     }
     //COPY CONSTRUCTOR
     public NodeData(node_data n) {
@@ -24,6 +26,7 @@ public class NodeData implements node_data ,  geo_location {
         this.tag = n.getTag();
         this.info = n.getInfo();
         this.weight = n.getWeight() ;
+        this.position = n.getLocation() ;
 
     }
 
@@ -46,7 +49,7 @@ public class NodeData implements node_data ,  geo_location {
      */
     @Override
     public geo_location getLocation() {
-        return  p ;
+        return  position ;
     }
 
     /**
@@ -56,7 +59,7 @@ public class NodeData implements node_data ,  geo_location {
      */
     @Override
     public void setLocation(geo_location p) {
-        this.p = p ;
+        this.position = p ;
     }
 
     /**
@@ -121,28 +124,6 @@ public class NodeData implements node_data ,  geo_location {
         this.tag = t;
     }
 
-    @Override
-    public double x() {
-        return this.getLocation().x();
-    }
-
-    @Override
-    public double y() {
-        return this.getLocation().y();
-    }
-
-    @Override
-    public double z() { return this.getLocation().z(); }
-
-    @Override
-    public double distance(geo_location g) {
-        double res = 0.0 ;
-        double twoX = (this.p.x() - g.x())*(this.p.x() - g.x()) ;
-        double twoY = (this.p.y() - g.y())*(this.p.y() - g.y()) ;
-        double twoZ = (this.p.z() - g.z())*(this.p.z() - g.z()) ;
-        res = twoX + twoY + twoZ ;
-        return Math.sqrt(res) ;
-    }
 
     @Override
     public boolean equals(Object o) {

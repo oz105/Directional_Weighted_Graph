@@ -3,10 +3,10 @@ package api;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gAlgo ;
@@ -161,6 +161,23 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public boolean load(String file) {
+
+        GsonBuilder gsonBuilder = new GsonBuilder() ;
+        JsonDeserializer<DWGraph_DS> deserializer = new JsonDeserializer<DWGraph_DS>() {
+            @Override
+            public DWGraph_DS deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+                JsonObject jsonObject = jsonElement.getAsJsonObject() ;
+//                DWGraph_DS graph = new DWGraph_DS(
+//                        jsonObject.get("Edges").getAsJsonArray(),
+//                        jsonObject.get("Nodes").getAsJsonArray()
+//                ) ;
+
+
+
+
+                return null;
+            }
+        };
         try {
             FileReader fileR = new FileReader(file);
             Gson gson = new Gson();

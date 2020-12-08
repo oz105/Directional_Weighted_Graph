@@ -1,8 +1,8 @@
 package api;
 
+import gameClient.util.Point3D;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -72,12 +72,27 @@ class NodeDataTest {
     }
 
     @Test
-    void getLocation() {
+    void getLocationAndGetLocation() {
+        NodeData n =new NodeData() ;
+        assertAll(
+                () -> assertEquals(0 , n.getLocation().x()),
+                () -> assertEquals(0 , n.getLocation().y()),
+                () -> assertEquals(0 , n.getLocation().z())
+        );
+        n.setLocation(new Point3D(1,1,1));
+        assertAll(
+                () -> assertEquals(1 , n.getLocation().x()),
+                () -> assertEquals(1 , n.getLocation().y()),
+                () -> assertEquals(1 , n.getLocation().z())
+        );
+        n.setLocation(new Point3D(8,10,12));
+        assertAll(
+                () -> assertEquals(8 , n.getLocation().x()),
+                () -> assertEquals(10 , n.getLocation().y()),
+                () -> assertEquals(12, n.getLocation().z())
+        );
 
-    }
 
-    @Test
-    void setLocation() {
 
     }
 
@@ -130,24 +145,6 @@ class NodeDataTest {
         assertNotEquals( 0, g.getNode(0).getTag());
         assertNotEquals(1 , g.getNode(1).getTag());
         assertNotEquals(1 , g.getNode(2).getTag());
-    }
-
-
-    @Test
-    void x() {
-
-    }
-
-    @Test
-    void y() {
-    }
-
-    @Test
-    void z() {
-    }
-
-    @Test
-    void distance() {
     }
 
 }
