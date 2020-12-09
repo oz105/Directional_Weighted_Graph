@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,15 +108,40 @@ class DWGraph_AlgoTest {
                 () -> assertEquals(-1,empty, "there is no Path , empty graph")
         );
         for (int i = 3; i <8 ; i++) {
-            int keyNum = 0 ;
-            keyNum = setupFullGraph(i) ;
+            setupFullGraph(i) ;
             algo.init(fullGraph);
-            assertEquals(1,algo.shortestPathDist(keyNum , keyNum+1));
+            System.out.println(algo.shortestPathDist(0 , i-1));
+            assertEquals(1,algo.shortestPathDist(0, i-1));
         }
     }
 
     @Test
     void shortestPath() {
+        setupFullGraph(30);
+        dwga1.init(fullGraph);
+        int arr [] = {0, 15, 17, 13, 29, 5};
+        double d = shortestSU(fullGraph, arr);
+//        System.out.println(fullGraph);
+
+        System.out.println("d= " +d+" dist="+dwga1.shortestPathDist(arr[0], arr[arr.length-1]));
+        assertTrue(d == dwga1.shortestPathDist(arr[0], arr[arr.length-1]));
+        List<node_data> sP = dwga1.shortestPath(arr[0], arr[arr.length-1]);
+        System.out.println(sP);
+        boolean b = sP.size()==arr.length;
+        assertTrue(b);
+        if(b){
+            int i=0;
+            for(node_data curr: sP) {
+                b &=curr.getKey()==arr[i];
+                i++;
+            }
+        }
+        assertTrue(b);
+
+
+
+
+
 
     }
     @Test
@@ -145,6 +171,9 @@ class DWGraph_AlgoTest {
 
     @Test
     void testEquals() {
+        int a = nextRnd(0, v_size*2);
+//        wg1 = wgRealRand(v_size, a, wg1 );
+        //*******************************************************************
     }
 
     //Functions
@@ -265,19 +294,6 @@ class DWGraph_AlgoTest {
         }
         return dwgTemp;
     }
-    public double shortestSU(directed_weighted_graph wg, int []a){
-//        double [] d = new double[a.length-1];
-        double d =0;
-        for (int i=0; i<a.length-1; i++){
-            node_data n1 =wg.getNode(a[i]);
-            node_data n2 = wg.getNode(a[i+1]);
-//            d[i]=nextRnd(0.01, 1);
-            double w = nextRnd(0.01, 1);
-            d+=w;
-            wg.connect(a[i], a[i+1], w);
-        }
-        return d;
-    }
 
     public static int nextRnd(int min, int max) {
         double v = nextRnd(0.0+min, (double)max);
@@ -290,20 +306,30 @@ class DWGraph_AlgoTest {
         double ans = d*dx+min;
         return ans;
     }
-    public static int setupFullGraph(int fullSize){
-        fullGraph=new DWGraph_DS();
-        int keyNum = 0 ;
-        for(int i=0;i<fullSize; i++){
-            node_data n = new NodeData() ;
+    public static void setupFullGraph(int fullSize) {
+        fullGraph = new DWGraph_DS();
+        for (int i = 0; i < fullSize; i++) {
+            node_data n = new NodeData(i);
             fullGraph.addNode(n);
-            keyNum = n.getKey() ;
         }
-        keyNum = keyNum - (fullSize-1) ;
-        for(int i=keyNum;i<keyNum + fullSize; i++){
-            for(int j=keyNum;j<keyNum + fullSize; j++){
-                fullGraph.connect(i,j,1);
+        for (int i = 0; i < fullSize; i++) {
+            for (int j = 0; j < fullSize; j++) {
+                fullGraph.connect(i, j, v_size*2);
             }
         }
-        return keyNum;
+    }
+    public double shortestSU(directed_weighted_graph wg, int []a){
+//        double [] d = new double[a.length-1];
+        double d =0;
+        for (int i=0; i<a.length-1; i++){
+            node_data n1 =wg.getNode(a[i]);
+            node_data n2 = wg.getNode(a[i+1]);
+//            d[i]=nextRnd(0.01, 1);
+            double w = nextRnd(0.01, 1);
+            d+=w;
+            wg.removeEdge(a[i], a[i+1]);
+            wg.connect(a[i], a[i+1], w);
+        }
+        return d;
     }
 }

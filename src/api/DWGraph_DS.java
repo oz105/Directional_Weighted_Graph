@@ -164,14 +164,22 @@ public class DWGraph_DS implements directed_weighted_graph {
     public node_data removeNode(int key) {
         if (verticesOfGraph.containsKey(key)) {
             int num_of_edges = edgesOfGraph.get(key).values().size();
-            edgesOfGraph.remove(key);
+//            edgesOfGraph.remove(key);
             verticesSize--;
             edgeSize -= num_of_edges;
+            int temp = -1;
+            System.out.println(reverse.get(key).keySet());
             for (Integer id : reverse.get(key).keySet()) {
-                edgesOfGraph.get(id).remove(key);
-                reverse.get(key).remove(id);
+                if(temp>=0) {
+                    edgesOfGraph.get(temp).remove(key);
+                }
+                System.out.println(id);
                 edgeSize--;
+                temp = id;
             }
+            reverse.get(key).remove(temp);
+            edgesOfGraph.get(temp).remove(key);
+            edgesOfGraph.remove(key);
             modeCount++;
             reverse.remove(key);
             return verticesOfGraph.remove(key);
@@ -233,7 +241,6 @@ public class DWGraph_DS implements directed_weighted_graph {
 
 
     public Collection<edge_data> getOV(int id) {
-
         return reverse.get(id).values();
     }
 
