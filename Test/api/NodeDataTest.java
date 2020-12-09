@@ -58,6 +58,10 @@ class NodeDataTest {
 
     @Test
     void getKey() {
+
+        node_data node = new NodeData(2);
+        assertEquals(node.getKey(), 2);
+
         boolean t = false ;
         try{
             emptyGraph.getNode(2).getKey() ;

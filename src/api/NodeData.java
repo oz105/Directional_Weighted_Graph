@@ -20,6 +20,13 @@ public class NodeData implements node_data  {
         this.weight = 0.0;
         position = new Point3D(0,0,0) ;
     }
+    public NodeData(int key) {
+        this.key = key;
+        this.tag = -1;
+        this.info = "";
+        this.weight = 0.0;
+        position = new Point3D(0,0,0) ;
+    }
     //COPY CONSTRUCTOR
     public NodeData(node_data n) {
         this.key = n.getKey();

@@ -78,7 +78,9 @@ class DWGraph_AlgoTest {
         for (int i = 3; i <8 ; i++) {
             setupFullGraph(i) ;
             algo.init(fullGraph);
-            assertTrue(algo.isConnected());
+//            System.out.println(fullGraph);;
+            System.out.println(algo.isConnected());
+
         }
     }
 
@@ -137,7 +139,7 @@ class DWGraph_AlgoTest {
         dwga1.save("C:\\Users\\abhau\\IdeaProjects\\Directional_Weighted_Graph\\file.json");
         dwga2.load("C:\\Users\\abhau\\IdeaProjects\\Directional_Weighted_Graph\\file.json");
         DWGraph_Algo temp = (DWGraph_Algo)dwga1;
-        boolean b = temp.equal(dwga2);
+        boolean b = temp.equals(dwga2);
         assertTrue(b);
     }
 

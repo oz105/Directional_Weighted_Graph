@@ -113,6 +113,7 @@ public class DWGraph_DS implements directed_weighted_graph {
                 if (!(edgesOfGraph.get(src).containsKey(dest))) {
                     edge_data addedEdge = new EdgeData(src, dest, w);
                     this.edgesOfGraph.get(src).put(dest, addedEdge);
+                    addedEdge = new EdgeData(dest, src, w);
                     this.reverse.get(dest).put(src, addedEdge);
                     this.edgeSize++;
                     this.modeCount++;
@@ -188,7 +189,7 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public edge_data removeEdge(int src, int dest) {
-        if (edgesOfGraph.containsKey(src) && edgesOfGraph.get(src).containsKey(dest)) {
+        if (edgesOfGraph.containsKey(src) &&  edgesOfGraph.get(src).containsKey(dest)) {
             edgesOfGraph.get(src).remove(dest);
             reverse.get(dest).remove(src);
             edgeSize--;
@@ -229,10 +230,7 @@ public class DWGraph_DS implements directed_weighted_graph {
         return this.modeCount;
     }
 
-    public Collection<Integer> getV(int id) {
-        return edgesOfGraph.get(id).keySet();
 
-    }
 
     public Collection<edge_data> getOV(int id) {
 
@@ -249,22 +247,6 @@ public class DWGraph_DS implements directed_weighted_graph {
                 edgeSize == that.edgeSize &&
                 Objects.equals(edgesOfGraph, that.edgesOfGraph) &&
                 Objects.equals(verticesOfGraph, that.verticesOfGraph);
-    }
-
-    public boolean equal(directed_weighted_graph p) {
-        if (p == this) return true;
-        else if (p == null) return false;
-        if (this.edgeSize != p.edgeSize() || this.verticesOfGraph.size() != p.getV().size()) {
-            return false;
-        }
-        if (p instanceof DWGraph_DS) {
-            DWGraph_DS temp = (DWGraph_DS) p;
-            String thisS = this.toString();
-            String tempS = temp.toString();
-            int comp = thisS.compareTo(tempS);
-            return (comp == 0);
-        }
-        return false;
     }
 
 //    public String toString() {

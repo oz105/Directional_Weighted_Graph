@@ -53,7 +53,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      */
     @Override
     public boolean isConnected() {
-        if(this.gAlgo.getV().size()==0 ||this.gAlgo.getV().size()==1)return true;
+        if(this.gAlgo.getV().size()==0 ||this.gAlgo.getV().size()==1){
+            int test= 0;
+            return true;
+        }
         if(this.gAlgo.edgeSize()==0 || this.gAlgo.nodeSize()>this.gAlgo.edgeSize()+1)
             return false;
         node_data temp = null;
@@ -61,7 +64,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             temp=node;
             break;
         }
-        return this.bfs(temp);
+        boolean test1= this.bfs(temp);
+        return test1;
 
     }
 
@@ -225,6 +229,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         temp = null;
         q = new LinkedList<node_data>() ;
         q.add(node);
+        node.setTag(2);
         counter ++;
         while(!q.isEmpty()){
             if(q.peek()!=null){
@@ -283,14 +288,6 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             }
         }
         return countVisit ;
-    }
-
-    public boolean equal(dw_graph_algorithms pa){
-        if(pa != null && this.gAlgo instanceof DWGraph_DS){
-            DWGraph_DS temp = (DWGraph_DS) this.gAlgo;
-            return temp.equal(pa.getGraph());
-        }
-        return false;
     }
 
     //equals with override when we will use assert equals
