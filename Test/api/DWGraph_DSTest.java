@@ -16,9 +16,7 @@ class DWGraph_DSTest {
     public static directed_weighted_graph fullGraph = new DWGraph_DS();
     static int seed = 31;
     static int v_size = 10;
-    static int e_size = v_size * 3;
     static Random _rnd = new Random(seed);
-    public static int keyCount = 0;
 
     private directed_weighted_graph emptyGraph;
     private directed_weighted_graph g;
@@ -45,7 +43,6 @@ class DWGraph_DSTest {
     }
 
 
-
     public directed_weighted_graph wgEmpty(int nodes, directed_weighted_graph dwgTemp) {
         dwgTemp = new DWGraph_DS();
         for (int i = 0; i < nodes; i++) {
@@ -55,24 +52,6 @@ class DWGraph_DSTest {
         return dwgTemp;
     }
 
-    public directed_weighted_graph
-    wgWhole(int nodes, directed_weighted_graph dwgTemp) {
-        dwgTemp = new DWGraph_DS();
-        int key = 0;
-        for (int i = 0; i < nodes; i++) {
-            node_data temp = new NodeData(i);
-            dwgTemp.addNode(temp);
-            key = temp.getKey();
-        }
-        key = key - (nodes - 1);
-        for (int i = 0; i < nodes; i++) {
-            for (int j = 0; j < nodes; j++) {
-                dwgTemp.connect(key + i, key + j, 5);
-
-            }
-        }
-        return dwgTemp;
-    }
 
 //    public directed_weighted_graph wgRandCreator(int nodes, int edges, directed_weighted_graph dwgTemp) {
 //        dwgTemp = wgEmpty(nodes, dwgTemp);
@@ -132,7 +111,6 @@ class DWGraph_DSTest {
 
     @Test
     void getNode() {
-        System.out.println(g.getNode(1).getKey());
         assertAll(" ",
                 () -> assertEquals(null, emptyGraph.getNode(0), "should be null"),
                 () -> assertEquals(null, emptyGraph.getNode(1), "should be null"),
@@ -167,9 +145,9 @@ class DWGraph_DSTest {
         NodeData n = new NodeData(100);
         g.addNode(n);
         assertEquals(12, g.nodeSize());
-        assertFalse(g.getNode(n.getKey())== null);
+        assertFalse(g.getNode(n.getKey()) == null);
         for (int i = 0; i < 4; i++) {
-            n = new NodeData(101+i);
+            n = new NodeData(101 + i);
             g.addNode(n);
         }
         assertNotEquals(13, g.nodeSize());
@@ -237,17 +215,17 @@ class DWGraph_DSTest {
         setupFullGraph(11);
 
         int counter = 0;
-        for (int i = 0; i <11 ; i++){
+        for (int i = 0; i < 11; i++) {
             int arr[] = new int[11];
-            counter=0;
-            for (edge_data e: ((DWGraph_DS) fullGraph).getE(i)) {
-                assertTrue(e.getWeight()==1);
-                assertTrue(e.getSrc()==i);
+            counter = 0;
+            for (edge_data e : ((DWGraph_DS) fullGraph).getE(i)) {
+                assertTrue(e.getWeight() == 1);
+                assertTrue(e.getSrc() == i);
                 arr[e.getDest()]++;
-                assertTrue(arr[e.getDest()]==1);
+                assertTrue(arr[e.getDest()] == 1);
                 counter++;
             }
-            assertTrue(10==counter);
+            assertTrue(10 == counter);
         }
 
 
@@ -263,17 +241,43 @@ class DWGraph_DSTest {
         assertEquals(removedNode, temp);
         boolean b = (wg1.getNode(key) == null);
         assertTrue(b);
+        assertEquals(null, emptyGraph.removeNode(2));
+        directed_weighted_graph graph = new DWGraph_DS();
+        for (int i = 1; i < 5; i++) {
+            node_data n = new NodeData(i);
+            graph.addNode(n);
+        }
+        graph.connect(1, 2, 1);
+        graph.connect(2, 1, 1);
+        graph.connect(2, 3, 1);
+        graph.connect(4, 2, 1);
+        graph.connect(4, 3, 1);
+        assertEquals(4, graph.nodeSize());
+        assertEquals(5, graph.edgeSize());
+        graph.removeNode(2);
+        assertEquals(1, graph.edgeSize());
+        assertEquals(null, graph.removeNode(2));
+        assertEquals(3, graph.nodeSize());
     }
 
     @Test
     void removeEdge() {
-        wg1 = wgWhole(10, wg1);
-        int a = nextRnd(0, 14);
-//        int b = a+1;
+        assertEquals(null, emptyGraph.removeNode(2));
+        assertEquals(null, emptyGraph.removeNode(0));
+        setupFullGraph(5);
+        assertEquals(20, fullGraph.edgeSize());
+        assertNotEquals(null , fullGraph.getEdge(0,1));
+        assertNotEquals(null , fullGraph.getEdge(0,2));
+        fullGraph.removeEdge(0, 1);
+        assertEquals(19, fullGraph.edgeSize());
+        assertNotEquals(null , fullGraph.getEdge(0,2));
+        fullGraph.removeEdge(0, 2);
+        assertEquals(18, fullGraph.edgeSize());
+        fullGraph.removeEdge(0, 1);
+        assertEquals(18, fullGraph.edgeSize());
+        assertEquals(null , fullGraph.getEdge(0,1));
+        assertEquals(null , fullGraph.getEdge(0,2));
 
-//        wg1.connect(0, 1, 1);
-        wg1.removeEdge(a, 15);
-        assertEquals(wg1.getEdge(a, 15), null);
     }
 
     @Test
@@ -300,8 +304,8 @@ class DWGraph_DSTest {
 
         }
         setupFullGraph(v_size);
-        wg1= fullGraph;
-        boolean b = (wg1.edgeSize() == (v_size * (v_size - 1) ));
+        wg1 = fullGraph;
+        boolean b = (wg1.edgeSize() == (v_size * (v_size - 1)));
         assertTrue(b);
         wg1.removeEdge(0, v_size - 1);
 
@@ -313,14 +317,8 @@ class DWGraph_DSTest {
         assertTrue(b);
 
         wg1.connect(0, 1, 3);
-        b = (wg1.edgeSize() == (v_size * (v_size - 1) ) - 1);
+        b = (wg1.edgeSize() == (v_size * (v_size - 1)) - 1);
         assertTrue(b);
-
-//        int edgesSize = nextRnd(1, (v_size * (v_size - 1)) - 1);
-//        wg1 = wgRandCreator(v_size, edgesSize, wg1);
-//        System.out.println(wg1.edgeSize()+" "+edgesSize);
-//        b = (wg1.edgeSize() == edgesSize);
-//        assertTrue(b);
 
         wg1 = wgEmpty(v_size, wg1);
         b = (wg1.edgeSize() == 0);
@@ -360,17 +358,17 @@ class DWGraph_DSTest {
     @Test
     void getOV() {
         setupFullGraph(11);
-        for (int i = 0; i <11 ; i++){
+        for (int i = 0; i < 11; i++) {
             int arr[] = new int[11];
-            int counter=0;
-            for (edge_data e: ((DWGraph_DS) fullGraph).getOV(i)) {
-                assertTrue(e.getWeight()==1);
-                assertTrue(e.getSrc()==i);
+            int counter = 0;
+            for (edge_data e : ((DWGraph_DS) fullGraph).getOV(i)) {
+                assertTrue(e.getWeight() == 1);
+                assertTrue(e.getSrc() == i);
                 arr[e.getDest()]++;
-                assertTrue(arr[e.getDest()]==1);
+                assertTrue(arr[e.getDest()] == 1);
                 counter++;
             }
-            assertTrue(10==counter);
+            assertTrue(10 == counter);
         }
     }
 
@@ -378,20 +376,14 @@ class DWGraph_DSTest {
     void testEqual() {
         wg1 = wgEmpty(v_size, wg1);
         wg2 = wgEmpty(v_size, wg2);
-        boolean b = wg2.equals((DWGraph_DS) wg1);
+        boolean b = wg2.equals(wg1);
         assertTrue(b);
         wg2.removeNode(1);
-        b = wg2.equals((DWGraph_DS) wg1);
+        b = wg2.equals(wg1);
         assertFalse(b);
-
-        wg1 = wgWhole(v_size, wg1);
-        wg2 = wgWhole(v_size, wg2);
-        b = wg2.equals((DWGraph_DS) wg1);
-        assertTrue(b);
         int a = nextRnd(1, v_size);
-
         wg2.removeEdge(0, a);
-        b = wg2.equals((DWGraph_DS) wg1);
+        b = wg2.equals(wg1);
         assertFalse(b);
     }
 

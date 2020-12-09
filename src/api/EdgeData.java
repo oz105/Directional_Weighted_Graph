@@ -109,4 +109,13 @@ public class EdgeData implements edge_data {
     public int hashCode() {
         return Objects.hash(src, dest, weight);
     }
+
+    @Override
+    public String toString() {
+        return "EdgeData{" +
+                "src=" + src +
+                ", dest=" + dest +
+                ", weight=" + weight +
+                '}';
+    }
 }

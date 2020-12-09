@@ -72,17 +72,31 @@ class DWGraph_AlgoTest {
         assertNotEquals(emptyGraph, deepCopyG);
     }
 
-    // need to check is connected not work
-    //try on 5 full graph and still return false.
+
     @Test
     void isConnected() {
+        directed_weighted_graph graph = new DWGraph_DS() ;
         for (int i = 3; i <8 ; i++) {
             setupFullGraph(i) ;
             algo.init(fullGraph);
-//            System.out.println(fullGraph);;
-            System.out.println(algo.isConnected());
-
         }
+        algo.init(emptyGraph);
+        assertTrue(algo.isConnected());
+        emptyGraph.addNode(new NodeData(0));
+        assertTrue(algo.isConnected());
+        emptyGraph.addNode(new NodeData(1));
+        assertFalse(algo.isConnected());
+        for (int i = 0; i <4 ; i++) {
+            graph.addNode(new NodeData(i));
+        }
+        graph.connect(0,1,1);
+        graph.connect(1,2,1);
+        graph.connect(2,3,1);
+        graph.connect(3,0,1);
+        algo.init(graph);
+        assertTrue(algo.isConnected());
+        graph.removeNode(2);
+        assertFalse(algo.isConnected());
     }
 
     @Test
