@@ -45,7 +45,6 @@ public class CL_Pokemon {
 		return _pos;
 	}
 	public int getType() {return _type;}
-//	public double getSpeed() {return _speed;}
 	public double getValue() {return _value;}
 
 	public double getMin_dist() {

@@ -7,7 +7,6 @@ import api.node_data;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
@@ -21,11 +20,13 @@ import java.util.List;
  *
  */
 public class MyFrame extends JFrame{
+	private gPanel panel ;
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
 	MyFrame(String a) {
 		super(a);
+		this.panel = new gPanel(_ar.getGraph()) ;
 		int _ind = 0;
 	}
 	public void update(Arena ar) {

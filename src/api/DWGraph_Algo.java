@@ -142,7 +142,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().create();
-        JsonObject g = new JsonObject();
+        JsonObject jsonObject = new JsonObject();
         JsonArray vertices = new JsonArray();
         JsonArray edges = new JsonArray();
         JsonObject savedNode = new JsonObject();
@@ -161,12 +161,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                 edge = new JsonObject();
             }
         }
-        g.add("Edges", edges);
-        g.add("Nodes", vertices);
+        jsonObject.add("Edges", edges);
+        jsonObject.add("Nodes", vertices);
         File f = new File(file);
         try {
             FileWriter fileWriter = new FileWriter(f);
-            fileWriter.write(gson.toJson(g));
+            fileWriter.write(gson.toJson(jsonObject));
             fileWriter.close();
             return true;
         } catch ( IOException e) {
@@ -187,13 +187,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     @Override
     public boolean load(String file) {
         directed_weighted_graph grpahLoaded = new DWGraph_DS();
-        JsonObject g;
+        JsonObject jsonObject;
         File f = new File(file);
         try {
             FileReader fileReader = new FileReader(f);
-            g = new JsonParser().parse(fileReader).getAsJsonObject();
-            JsonArray edges = g.getAsJsonArray("Edges");
-            JsonArray vertices = g.getAsJsonArray("Nodes");
+            jsonObject = new JsonParser().parse(fileReader).getAsJsonObject();
+            JsonArray edges = jsonObject.getAsJsonArray("Edges");
+            JsonArray vertices = jsonObject.getAsJsonArray("Nodes");
 
             for (JsonElement v : vertices) {
                 int key = ((JsonObject)v).get("id").getAsInt();

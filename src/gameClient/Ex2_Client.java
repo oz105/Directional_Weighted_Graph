@@ -6,11 +6,11 @@ import api.edge_data;
 import api.game_service;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 
 public class Ex2_Client implements Runnable{
 	private static MyFrame _win;
@@ -40,7 +40,7 @@ public class Ex2_Client implements Runnable{
 			moveAgants(game, gg);
 			try {
 				if(ind%1==0) {_win.repaint();}
-				Thread.sleep(dt);
+				Thread.sleep(dt*5);
 				ind++;
 			}
 			catch(Exception e) {

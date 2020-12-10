@@ -2,6 +2,7 @@ package api;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -14,12 +15,10 @@ class DWGraph_AlgoTest {
 
 
     private static long start;
-    public static directed_weighted_graph dwg1= new DWGraph_DS();
     public static directed_weighted_graph dwg2= new DWGraph_DS();
     public static dw_graph_algorithms dwga1= new DWGraph_Algo();
-    public static dw_graph_algorithms dwga2= new DWGraph_Algo();
     public static dw_graph_algorithms algo= new DWGraph_Algo();
-    public static directed_weighted_graph dwgSpecifi= new DWGraph_DS();
+    public static directed_weighted_graph dwgSpecifi ;
     private static directed_weighted_graph emptyGraph;
     private static directed_weighted_graph fullGraph;
 
@@ -29,11 +28,11 @@ class DWGraph_AlgoTest {
     static Random _rnd = new Random(seed);
 
 
-
     @Test
     void init() {
+        algo.init(dwgSpecifi);
         assertAll("",
-                () -> assertEquals(18 , algo.getGraph().edgeSize()),
+                () -> assertEquals(19 , algo.getGraph().edgeSize()),
                 () -> assertEquals(12 , algo.getGraph().nodeSize())
         );
         algo.init(emptyGraph);
@@ -124,8 +123,7 @@ class DWGraph_AlgoTest {
         for (int i = 3; i <8 ; i++) {
             setupFullGraph(i) ;
             algo.init(fullGraph);
-            System.out.println(algo.shortestPathDist(0 , i-1));
-            assertEquals(1,algo.shortestPathDist(0, i-1));
+            assertEquals(20,algo.shortestPathDist(0, i-1));
         }
     }
 
@@ -135,12 +133,8 @@ class DWGraph_AlgoTest {
         dwga1.init(fullGraph);
         int arr [] = {0, 15, 17, 13, 29, 5};
         double d = shortestSU(fullGraph, arr);
-//        System.out.println(fullGraph);
-
-        System.out.println("d= " +d+" dist="+dwga1.shortestPathDist(arr[0], arr[arr.length-1]));
         assertTrue(d == dwga1.shortestPathDist(arr[0], arr[arr.length-1]));
         List<node_data> sP = dwga1.shortestPath(arr[0], arr[arr.length-1]);
-        System.out.println(sP);
         boolean b = sP.size()==arr.length;
         assertTrue(b);
         if(b){
@@ -159,28 +153,37 @@ class DWGraph_AlgoTest {
 
     }
     @Test
-    void save(){
-        node_data node0 = new NodeData();
-        dwg1.addNode(node0);
-        node_data node1 = new NodeData();
-        dwg1.addNode(node1);
-        node_data node2 = new NodeData();
-        dwg1.addNode(node2);
-        dwg1.connect(0, 1, 0.1);
-        dw_graph_algorithms dwga = new DWGraph_Algo();
-        dwga.init(dwg1);
-        dwga.save("file");
-
-    }
-    @Test
-    void load(){
-//        dwg1= wgSpecific(dwg1);
-        dwga1.init(dwg1);
-        dwga1.save("C:\\Users\\abhau\\IdeaProjects\\Directional_Weighted_Graph\\file.json");
-        dwga2.load("C:\\Users\\abhau\\IdeaProjects\\Directional_Weighted_Graph\\file.json");
-        DWGraph_Algo temp = (DWGraph_Algo)dwga1;
-        boolean b = temp.equals(dwga2);
-        assertTrue(b);
+    void saveAndLoad(){
+        directed_weighted_graph tempGraph = new DWGraph_DS() ;
+        for (int i = 0; i <4 ; i++) {
+            tempGraph.addNode(new NodeData(i));
+        }
+        tempGraph.connect(0,1,1);
+        tempGraph.connect(2,1,1);
+        tempGraph.connect(3,1,1);
+        algo.init(tempGraph);
+        directed_weighted_graph gCopy = algo.copy();
+        dw_graph_algorithms temp = new DWGraph_Algo();
+        algo.save("this is g graph");
+        temp.load("this is g graph");
+        assertEquals(gCopy, temp.getGraph());
+        gCopy.removeNode(1);
+        assertNotEquals(gCopy, temp.getGraph());
+        setupFullGraph(5);
+        algo.init(fullGraph);
+        algo.save("this is fullGraph5");
+        gCopy = algo.copy();
+        temp.load("this is fullGraph5");
+        assertEquals(gCopy, temp.getGraph());
+        gCopy.removeNode(1);
+        assertNotEquals(gCopy, temp.getGraph());
+        algo.init(emptyGraph);
+        algo.save("this is emptyGraph");
+        temp.load("this is emptyGraph");
+        gCopy = algo.copy();
+        assertEquals(gCopy, temp.getGraph());
+        gCopy.removeNode(1);
+        assertEquals(gCopy, temp.getGraph());
     }
 
     @Test
@@ -200,45 +203,8 @@ class DWGraph_AlgoTest {
     @BeforeAll
     static void startRunTimeAndSetUpGraph(){
         start=new Date().getTime();
-        emptyGraph = new DWGraph_DS() ;
-        for (int i = 0; i < 12 ; i++) {
-            NodeData n = new NodeData() ;
-            dwgSpecifi.addNode(n);
-        }
-        dwgSpecifi.connect(0,1,3);
-        dwgSpecifi.connect(0,3,2);
-
-        dwgSpecifi.connect(1,4,1);
-
-        dwgSpecifi.connect(2,6,3);
-
-        dwgSpecifi.connect(3,5,1);
-
-        dwgSpecifi.connect(4,1,1);
-        dwgSpecifi.connect(4,11,3);
-        dwgSpecifi.connect(4,7,2);
-
-        dwgSpecifi.connect(5,10,3);
-        dwgSpecifi.connect(5,11,2);
-        dwgSpecifi.connect(5,9,2);
-
-        dwgSpecifi.connect(6,7,2);
-        dwgSpecifi.connect(6,0,2);
-
-
-        dwgSpecifi.connect(7,9,1);
-
-        dwgSpecifi.connect(8,3,4);
-
-        dwgSpecifi.connect(9,11,1);
-        dwgSpecifi.connect(9,4,2);
-
-        dwgSpecifi.connect(10,8,1);
-
-        dwgSpecifi.connect(11,6,3); // 18 Edges
-
-        algo.init(dwgSpecifi);
     }
+
 
     /**
      * This method run after all the test done
@@ -345,5 +311,45 @@ class DWGraph_AlgoTest {
             wg.connect(a[i], a[i+1], w);
         }
         return d;
+    }
+    @BeforeEach
+    void setUpGraphs () {
+        emptyGraph = new DWGraph_DS() ;
+        dwgSpecifi = new DWGraph_DS() ;
+        for (int i = 0; i < 12 ; i++) {
+            NodeData n = new NodeData(i) ;
+            dwgSpecifi.addNode(n);
+        }
+        dwgSpecifi.connect(0,1,3);
+        dwgSpecifi.connect(0,3,2);
+
+        dwgSpecifi.connect(1,4,1);
+
+        dwgSpecifi.connect(2,6,3);
+
+        dwgSpecifi.connect(3,5,1);
+
+        dwgSpecifi.connect(4,1,1);
+        dwgSpecifi.connect(4,11,3);
+        dwgSpecifi.connect(4,7,2);
+
+        dwgSpecifi.connect(5,10,3);
+        dwgSpecifi.connect(5,11,2);
+        dwgSpecifi.connect(5,9,2);
+
+        dwgSpecifi.connect(6,7,2);
+        dwgSpecifi.connect(6,0,2);
+
+
+        dwgSpecifi.connect(7,9,1);
+
+        dwgSpecifi.connect(8,3,4);
+
+        dwgSpecifi.connect(9,11,1);
+        dwgSpecifi.connect(9,4,2);
+
+        dwgSpecifi.connect(10,8,1);
+
+        dwgSpecifi.connect(11,6,3); // 19 Edges
     }
 }
