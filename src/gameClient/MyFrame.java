@@ -20,13 +20,11 @@ import java.util.List;
  *
  */
 public class MyFrame extends JFrame{
-	private gPanel panel ;
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
 	MyFrame(String a) {
 		super(a);
-		this.panel = new gPanel(_ar.getGraph()) ;
 		int _ind = 0;
 	}
 	public void update(Arena ar) {
@@ -50,7 +48,7 @@ public class MyFrame extends JFrame{
 		drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		
+
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
@@ -58,7 +56,7 @@ public class MyFrame extends JFrame{
 		for(int i=0;i<str.size();i++) {
 			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
 		}
-		
+
 	}
 	private void drawGraph(Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();
@@ -79,9 +77,9 @@ public class MyFrame extends JFrame{
 		List<CL_Pokemon> fs = _ar.getPokemons();
 		if(fs!=null) {
 		Iterator<CL_Pokemon> itr = fs.iterator();
-		
+
 		while(itr.hasNext()) {
-			
+
 			CL_Pokemon f = itr.next();
 			Point3D c = f.getLocation();
 			int r=10;
@@ -92,7 +90,7 @@ public class MyFrame extends JFrame{
 				geo_location fp = this._w2f.world2frame(c);
 				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
 			//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
-				
+
 			}
 		}
 		}

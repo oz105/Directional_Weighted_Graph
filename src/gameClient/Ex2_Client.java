@@ -40,7 +40,7 @@ public class Ex2_Client implements Runnable{
 			moveAgants(game, gg);
 			try {
 				if(ind%1==0) {_win.repaint();}
-				Thread.sleep(dt*5);
+				Thread.sleep(dt*4);
 				ind++;
 			}
 			catch(Exception e) {

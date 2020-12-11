@@ -27,7 +27,7 @@ public class Ex2 {
         directed_weighted_graph graphh = new DWGraph_DS();
         algo.init(graphh);
         algo.load("data\\A0") ;
-        GFrame f = new GFrame(algo.getGraph()) ;
+
 
 
     }
