@@ -1,11 +1,16 @@
 package gameClient;
 
 import Server.Game_Server_Ex2;
-import api.directed_weighted_graph;
-import api.edge_data;
-import api.game_service;
+import api.*;
+import gameClient.util.Point3D;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,17 +27,17 @@ public class Ex2_Client implements Runnable{
 	
 	@Override
 	public void run() {
-		int scenario_num = 0;
+		int scenario_num = 11;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 	//	int id = 999;
 	//	game.login(id);
 		String g = game.getGraph();
 		String pks = game.getPokemons();
-		directed_weighted_graph gg = game.getJava_Graph_Not_to_be_used();
+//		directed_weighted_graph gg = game.getJava_Graph_Not_to_be_used();
+		directed_weighted_graph gg = stringToGraph(game.getGraph());
 		init(game);
-		
 		game.startGame();
-		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
+//		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
 		int ind=0;
 		long dt=100;
 		
@@ -61,7 +66,11 @@ public class Ex2_Client implements Runnable{
 	 */
 	private static void moveAgants(game_service game, directed_weighted_graph gg) {
 		String lg = game.move();
+		System.out.println("agents "+  game.getAgents());
+		System.out.println("move "+ lg);
 		List<CL_Agent> log = Arena.getAgents(lg, gg);
+		System.out.println("aganes for tal"+log);
+
 		_ar.setAgents(log);
 		//ArrayList<OOP_Point3D> rs = new ArrayList<OOP_Point3D>();
 		String fs =  game.getPokemons();
@@ -132,5 +141,35 @@ public class Ex2_Client implements Runnable{
 			}
 		}
 		catch (JSONException e) {e.printStackTrace();}
+	}
+
+	public static directed_weighted_graph stringToGraph (String s){
+		directed_weighted_graph g = new DWGraph_DS();
+		try{
+			JSONObject jsonObject = new JSONObject(s) ;
+			JSONArray edges = jsonObject.getJSONArray("Edges") ;
+			JSONArray vertices = jsonObject.getJSONArray("Nodes") ;
+			for (int i = 0; i <vertices.length() ; i++) {
+				JSONObject v = vertices.getJSONObject(i) ;
+				int key = v.getInt("id") ;
+				String p = v.getString("pos") ;
+				geo_location pos = new Point3D(p) ;
+				node_data n = new NodeData(key) ;
+				n.setLocation(pos);
+				g.addNode(n);
+			}
+			for (int i = 0; i <edges.length() ; i++) {
+				JSONObject e = edges.getJSONObject(i) ;
+				int src = e.getInt("src") ;
+				double weight = e.getDouble("w") ;
+				int dest = e.getInt("dest");
+				edge_data edge = new EdgeData(src, dest, weight);
+				g.connect(edge.getSrc(), edge.getDest(), edge.getWeight());
+			}
+			return g ;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null ;
+		}
 	}
 }

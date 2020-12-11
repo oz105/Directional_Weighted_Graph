@@ -26,6 +26,7 @@ public class MyFrame extends JFrame{
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
+		this.setTitle("Ex2");
 	}
 	public void update(Arena ar) {
 		this._ar = ar;

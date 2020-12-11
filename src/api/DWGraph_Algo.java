@@ -197,13 +197,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
             for (JsonElement v : vertices) {
                 int key = ((JsonObject)v).get("id").getAsInt();
-                double x,y,z;
                 String pos = ((JsonObject) v).get("pos").getAsString();
-                String[] posArr = pos.split(",");
-                x = Double.parseDouble(posArr[0]);
-                y = Double.parseDouble(posArr[1]);
-                z = Double.parseDouble(posArr[2]);
-                geo_location p = new Point3D(x, y, z);
+                geo_location p = new Point3D(pos);
                 node_data n = new NodeData(key);
                 n.setLocation(p);
                 grpahLoaded.addNode(n);
