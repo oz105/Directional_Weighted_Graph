@@ -205,9 +205,9 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             }
 
             for (JsonElement edge : edges) {
+                int dest = ((JsonObject) edge).get("dest").getAsInt();
                 int src = ((JsonObject) edge).get("src").getAsInt();
                 double weight = ((JsonObject) edge).get("w").getAsDouble();
-                int dest = ((JsonObject) edge).get("dest").getAsInt();
                 edge_data e = new EdgeData(src, dest, weight);
                 grpahLoaded.connect(e.getSrc(), e.getDest(), e.getWeight());
             }
