@@ -18,7 +18,9 @@ public class Ex2 {
     private static dw_graph_algorithms algo ;
 
     public static void main(String[] args) {
-        int levelGame = 22;
+
+
+        int levelGame = 3;
         game_service game = Game_Server_Ex2.getServer(levelGame);
         directed_weighted_graph grapicGame = stringToGraph(game.getGraph());
         init(game);
@@ -29,6 +31,7 @@ public class Ex2 {
 
         while (game.isRunning()) {
             moveAgants(game, grapicGame);
+            window.update(arena);
             try {
                 if (ind % 1 == 0) {
                     window.repaint();
@@ -54,6 +57,20 @@ public class Ex2 {
         arena = new Arena();
         arena.setGraph(gg);
         arena.setPokemons(Arena.json2Pokemons(gamePokemons));
+
+        //////////////////////// test start
+        List<CL_Pokemon> pock = Arena.json2Pokemons(gamePokemons);
+
+        for(CL_Pokemon pocki : pock) {
+            Arena.updateEdge(pocki,gg );
+
+        }
+        arena.setPokemons(pock);
+        String s=gamePokemons;
+
+//        Point3D ;
+        ////////////////// test end
+        System.out.println(Arena.json2Pokemons(gamePokemons));// test
         window = new MyFrame("test Ex2");
         window.setSize(1000, 700);
         window.update(arena);
@@ -122,7 +139,6 @@ public class Ex2 {
         String lg = game.move();
         List<CL_Agent> agentsList = Arena.getAgents(lg, gg);
         arena.setAgents(agentsList);
-        //ArrayList<OOP_Point3D> rs = new ArrayList<OOP_Point3D>();
         String fs = game.getPokemons();
         List<CL_Pokemon> pokemonList = Arena.json2Pokemons(fs);
         arena.setPokemons(pokemonList);
@@ -138,8 +154,13 @@ public class Ex2 {
                     pok = pokemonList.get(i) ;
                     break;
                 }
-                dest = nextNode(gg, src , pok.get_edge().getSrc());
-                // עושה בעיות  , צריך לשלוח בעצם את הsrc של הצלע שעליה נמצא הפוקימון לא הצלחתי להבין איך משיגים אותה
+//                Point3D p = pok.getLocation();
+//                gg.getE();
+//                p.close2equals();
+//                gg.getE().
+//                System.out.println(pok.get_edge());
+//                String s = game.getPokemons();
+                dest = nextNode1(gg, src , pok.getLocation());
                 game.chooseNextEdge(ag.getID(), dest);
                 System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
             }
@@ -155,7 +176,102 @@ public class Ex2 {
         else {
             return ((NodeData) path.get(1)).getKey() ;
         }
+
     }
+
+    private static int nextNode1(directed_weighted_graph gg, int keyS, Point3D p) {
+        int keyD =  findCloseNode(gg, p);
+        algo= new DWGraph_Algo();
+        algo.init(gg);
+        List<node_data> spd= algo.shortestPath(keyS, keyD);
+        if(spd.size() ==1){
+            // the
+            return spd.get(0).getKey();
+        }
+        else if(spd.get(1).getKey()==keyS){
+
+        }
+        return spd.get(1).getKey();
+
+    }
+    private static int findCloseNode(directed_weighted_graph gg, Point3D p){
+
+        for(node_data node : gg.getV()) {
+            for (edge_data e : gg.getE(node.getKey())) {
+                if(betweenEdge(gg, e, p)) {
+
+                    return e.getSrc();
+
+                }
+            }
+        }
+        return -1;
+    }
+    private static boolean betweenEdge(directed_weighted_graph gg,edge_data e, Point3D p) {
+        double xP = p.x();
+        double yP = p.y();
+
+        double xS = gg.getNode(e.getSrc()).getLocation().x();
+        double yS = gg.getNode(e.getSrc()).getLocation().y();
+
+        double xD = gg.getNode(e.getDest()).getLocation().x();
+        double yD = gg.getNode(e.getDest()).getLocation().y();
+
+
+        if (xD == xS) {
+            if (xP != xD) {
+
+                return false;
+            } else if (yD <= yS) {
+                if (yD <= yP && yP <= yS) {
+
+                    return true;
+                } else {
+
+                    return false;
+                }
+            } else {
+                // then yS < yD
+                if (yS <= yP && yP <= yD) {
+                    return true;
+                } else {
+
+                    return false;
+                }
+
+            }
+        } else if (yD == yS) {
+            if (yP != yD) {
+                // if the pock s not between them
+                return false;
+            } else if (xD <= xS) {
+                if (xD <= xP && xP <= xS) {
+
+                    return true;
+                } else {
+
+                    return false;
+                }
+            } else {
+                // then xS < xD
+                if (xS <= xP && xP <= xD) {
+                    return true;
+                } else {
+
+                    return false;
+                }
+
+            }
+        }
+
+
+        double m = (yD - yS) / (xD - xS);
+        double n = yD - m * xD;
+        double checkY = m * xP + n;
+        return checkY==yP;
+
+    }
+
 
 }
 
