@@ -60,6 +60,7 @@ public class CL_Agent {
 	}
 	//@Override
 	public int getSrcNode() {return this._curr_node.getKey();}
+
 	public String toJSON() {
 		int d = this.getNextNode();
 		String ans = "{\"Agent\":{"
@@ -136,9 +137,11 @@ public class CL_Agent {
 	public CL_Pokemon get_curr_fruit() {
 		return _curr_fruit;
 	}
+
 	public void set_curr_fruit(CL_Pokemon curr_fruit) {
 		this._curr_fruit = curr_fruit;
 	}
+// המקורי
 	public void set_SDT(long ddtt) {
 		long ddt = ddtt;
 		if(this._curr_edge!=null) {
@@ -149,6 +152,7 @@ public class CL_Agent {
 			double dist = _pos.distance(dest);
 			if(this.get_curr_fruit().get_edge()==this.get_curr_edge()) {
 				dist = _curr_fruit.getLocation().distance(this._pos);
+
 			}
 			double norm = dist/de;
 			double dt = w*norm / this.getSpeed();
@@ -156,6 +160,41 @@ public class CL_Agent {
 		}
 		this.set_sg_dt(ddt);
 	}
+
+//	// start of test
+//	public void set_SDT(long ddtt) {
+//		long ddt = ddtt;
+//		if(this._curr_edge!=null) {
+//			double w = get_curr_edge().getWeight();
+//			geo_location dest = _gg.getNode(get_curr_edge().getDest()).getLocation();
+//			geo_location src = _gg.getNode(get_curr_edge().getSrc()).getLocation();
+//			double de = src.distance(dest);
+//			double dist = _pos.distance(dest);
+//			if(this.get_curr_fruit().get_edge()==this.get_curr_edge()) {
+//				dist = _curr_fruit.getLocation().distance(this._pos);
+//			}
+//
+//			directed_weighted_graph gg =
+//			double step = 0;
+//			if(this._pos.distance(gg.getNode(_curr_edge.getDest()).getLocation)<_pos.distance(_curr_fruit.getLocation())){
+//
+//			}
+//
+//
+////			double norm = dist/de;
+////			double dt = w*norm / this.getSpeed();
+////			ddt = (long)(1000.0*dt);
+//		}
+//		this.set_sg_dt(ddt);
+//	}
+
+
+
+
+
+
+
+	// end of test
 
 	public edge_data get_curr_edge() {
 		return this._curr_edge;

@@ -27,8 +27,10 @@ public class Arena {
 	private List<CL_Agent> _agents;
 	private List<CL_Pokemon> _pokemons;
 	private List<String> _info;
+//	private static double minX, minY, maxX, maxY;
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
+
 
 	public Arena() {;
 		_info = new ArrayList<String>();
@@ -127,7 +129,6 @@ public class Arena {
 	}
 
 	private static boolean isOnEdge(geo_location p, geo_location src, geo_location dest ) {
-
 		boolean ans = false;
 		double dist = src.distance(dest);
 		double d1 = src.distance(p) + p.distance(dest);
@@ -174,5 +175,27 @@ public class Arena {
 		Range2Range ans = new Range2Range(world, frame);
 		return ans;
 	}
+
+//	private void getMinAndMax(directed_weighted_graph gg){
+//
+//		for( node_data node : gg.getV()){
+//			if(node.getLocation().x()<minX){
+//				minX =  node.getLocation().x();
+//			}
+//			if(node.getLocation().x()>maxX){
+//				maxX =  node.getLocation().x();
+//			}
+//			if(node.getLocation().y()<minY){
+//				minY =  node.getLocation().y();
+//			}
+//			if(node.getLocation().y()>maxY){
+//				maxY =  node.getLocation().y();
+//			}
+//		}
+//		MIN = new Point3D(minX, minY, 0);
+//		MAX = new Point3D(maxX, maxY, 0);
+//
+//
+//	}
 
 }

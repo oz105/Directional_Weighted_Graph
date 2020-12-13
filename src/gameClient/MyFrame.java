@@ -9,6 +9,7 @@ import gameClient.util.Range;
 import gameClient.util.Range2D;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class MyFrame extends JFrame{
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
+//		this.addComponentL
 		this.setTitle("Ex2");
 	}
 	public void update(Arena ar) {
@@ -36,6 +38,7 @@ public class MyFrame extends JFrame{
 	private void updateFrame() {
 		Range rx = new Range(20,this.getWidth()-20);
 		Range ry = new Range(this.getHeight()-10,150);
+//		d rx = Math.abs(Ex2.maxX-Ex2.minX);
 		Range2D frame = new Range2D(rx,ry);
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
