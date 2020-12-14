@@ -2,6 +2,8 @@ package gameClient;
 
 import Server.Game_Server_Ex2;
 import api.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import gameClient.util.Point3D;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ex2Client implements Runnable {
-    public static int count = 0;
+    private int gameLevel;
+    private int grade;
+    private int Moves;
+    private long sleepTime;
+    private boolean getToDestntion;
     private static MyFrame window;
     private static Arena arena;
     private static dw_graph_algorithms algo;
@@ -19,7 +25,7 @@ public class Ex2Client implements Runnable {
 
     @Override
     public void run() {
-        int levelGame = 15;
+        int levelGame = 1;
         game_service game = Game_Server_Ex2.getServer(levelGame);
 //        game.login(207935214);
         directed_weighted_graph grapicGame = stringToGraph(game.getGraph());
@@ -29,24 +35,44 @@ public class Ex2Client implements Runnable {
         long dt = 100;
 
         while (game.isRunning()) {
-            String agentsString = game.move();
-            List<CL_Agent> agentsList = Arena.getAgents(agentsString, grapicGame);
             moveAgants(game, grapicGame);
+            String agentsString = game.getAgents();
+            List<CL_Agent> agentsList = Arena.getAgents(agentsString, grapicGame);
             window.update(arena);
             try {
                 if (ind % 1 == 0) {
                     window.repaint();
                 }
+//                getToDestntion = true ;
+//                for (int i = 0; i < agentsList.size(); i++) {
+//                    if (agentsList.get(i).getMakeToDest() != -1) {
+//                        getToDestntion = false;
+//                        i = 0;
+//                    }
+//                    Thread.sleep(dt * 3);
+//                }
                 Thread.sleep(dt * 4);
-                ind++;
+//                    ind++;
+                game.move();
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            String gameString = game.toString();
+            Gson gson = new Gson();
+            JsonObject jsonObjectGame = gson.fromJson(gameString, JsonObject.class);
+            JsonObject gameServer = jsonObjectGame.getAsJsonObject("GameServer");
+            gameLevel = gameServer.get("game_level").getAsInt();
+            arena.setGameLevel(gameLevel);
+            grade = gameServer.get("grade").getAsInt();
+            arena.setGrade(grade);
+            Moves = gameServer.get("moves").getAsInt();
+            arena.setMoves(Moves);
+            arena.setTimeToEnd(game.timeToEnd());
         }
+
         String res = game.toString();
         System.out.println(res);
-        System.out.println("count move " + count);
         System.exit(0);
 
     }
@@ -101,10 +127,11 @@ public class Ex2Client implements Runnable {
         }
     }
 
-        private static void moveAgants(game_service game, directed_weighted_graph gg) {
+    private static void moveAgants(game_service game, directed_weighted_graph gg) {
         int srcPok = 0;
         boolean hasEdge = true;
-        String lg = game.move();
+//        String lg1 = game.move();
+        String lg = game.getAgents();
         List<CL_Agent> agentsList = Arena.getAgents(lg, gg);
         arena.setAgents(agentsList);
         String fs = game.getPokemons();
@@ -155,7 +182,8 @@ public class Ex2Client implements Runnable {
             return path.get(1).getKey();
         }
     }
-    public static CL_Pokemon findClosetPokemon(directed_weighted_graph g,List<CL_Pokemon>pokemonList,int srcAgent){
+
+    public static CL_Pokemon findClosetPokemon(directed_weighted_graph g, List<CL_Pokemon> pokemonList, int srcAgent) {
         int pokIndex = 0;
         double min = Double.MAX_VALUE;
         double dis = 0;

@@ -64,11 +64,17 @@ public class MyFrame extends JFrame {
     public void paintComponent(Graphics bufferGraphics) {
         int w = this.getWidth();
         int h = this.getHeight();
-//        bufferGraphics.drawString("time to end: "+(game.timeToEnd() / 1000) + "\'s" ,x, y);
         drawPokemons(bufferGraphics);
         drawGraph(bufferGraphics);
         drawAgants(bufferGraphics);
         drawInfo(bufferGraphics);
+        bufferGraphics.setColor(Color.black);
+        bufferGraphics.setFont(new Font("name", Font.PLAIN,16));
+        geo_location geo = _w2f.getFrame().fromPortion(new Point3D(0,0,0)) ;
+        int pX = (int) geo.x() ;
+        int pY = (int) geo.y() ;
+        bufferGraphics.drawString("Moves:" + _ar.getMoves() + "  Score:" + _ar.getGrade() + "  Level: "
+                + _ar.getGameLevel()+"  Time to end: "+_ar.getTimeToEnd()/1000+" sec", pX, pY-4);
 
     }
 
@@ -117,7 +123,7 @@ public class MyFrame extends JFrame {
                 }
                 if (c != null) {
                     geo_location fp = this._w2f.world2frame(c);
-                    graphics2D.drawImage(img, (int) fp.x() - r, (int) fp.y() - r, 4 * r, 4 * r, this);
+                    graphics2D.drawImage(img, (int) fp.x() - r, (int) fp.y() - (r+15), 4 * r, 4 * r, this);
                 }
             }
         }
@@ -137,7 +143,7 @@ public class MyFrame extends JFrame {
             if (c != null) {
 
                 geo_location fp = this._w2f.world2frame(c);
-                graphics2D.drawImage(agent,(int)fp.x()-r,(int)fp.y()-r,5*r,5*r,this);
+                graphics2D.drawImage(agent,(int)fp.x()-r,(int)fp.y()-r,4*r,4*r,this);
 //                g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
             }
         }
@@ -151,7 +157,7 @@ public class MyFrame extends JFrame {
         geo_location pos = n.getLocation();
         geo_location fp = this._w2f.world2frame(pos);
 //        g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
-        graphics2D.drawImage(location,(int)fp.x()-r-2,(int)fp.y()-r-12,3*r,3*r,this);
+        graphics2D.drawImage(location,(int)fp.x()-r,(int)fp.y()-r-12,3*r,3*r,this);
         g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 4 * r);
     }
 

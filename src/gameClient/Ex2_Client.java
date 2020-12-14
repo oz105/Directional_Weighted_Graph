@@ -2,6 +2,7 @@ package gameClient;
 
 import Server.Game_Server_Ex2;
 import api.*;
+import com.google.gson.JsonObject;
 import gameClient.util.Point3D;
 import org.json.JSONArray;
 import org.json.JSONException;

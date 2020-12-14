@@ -23,6 +23,11 @@ import java.util.List;
  */
 public class Arena {
 	public static final double EPS1 = 0.001, EPS2=EPS1*EPS1, EPS=EPS2;
+	private int grade;
+	private int Moves;
+	private int gameLevel;
+	private long timeToEnd ;
+
 	private directed_weighted_graph _gg;
 	private List<CL_Agent> _agents;
 	private List<CL_Pokemon> _pokemons;
@@ -30,6 +35,7 @@ public class Arena {
 //	private static double minX, minY, maxX, maxY;
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
+
 
 
 	public Arena() {;
@@ -198,4 +204,34 @@ public class Arena {
 //
 //	}
 
+	public int getGrade (){
+		return grade ;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+	public int getMoves() {
+		return Moves;
+	}
+
+	public void setMoves(int moves) {
+		this.Moves = moves;
+	}
+
+	public int getGameLevel() {
+		return gameLevel;
+	}
+
+	public void setGameLevel(int gameLevel) {
+		this.gameLevel = gameLevel;
+	}
+
+	public long getTimeToEnd() {
+		return timeToEnd;
+	}
+
+	public void setTimeToEnd(long timeToEnd) {
+		this.timeToEnd = timeToEnd;
+	}
 }

@@ -8,6 +8,7 @@ import gameClient.util.Point3D;
 import org.json.JSONObject;
 
 public class CL_Agent {
+	private int makeToDest ;
 	public static final double EPS = 0.0001;
 	private static int _count = 0;
 	private static int _seed = 3331;
@@ -63,6 +64,7 @@ public class CL_Agent {
 
 	public String toJSON() {
 		int d = this.getNextNode();
+		makeToDest = d ;
 		String ans = "{\"Agent\":{"
 				+ "\"id\":"+this._id+","
 				+ "\"value\":"+this._value+","
@@ -161,7 +163,10 @@ public class CL_Agent {
 		this.set_sg_dt(ddt);
 	}
 
-//	// start of test
+	public int getMakeToDest() {
+		return makeToDest;
+	}
+	//	// start of test
 //	public void set_SDT(long ddtt) {
 //		long ddt = ddtt;
 //		if(this._curr_edge!=null) {
