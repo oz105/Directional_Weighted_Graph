@@ -73,6 +73,7 @@ public class MyFrame extends JFrame {
         geo_location geo = _w2f.getFrame().fromPortion(new Point3D(0,0,0)) ;
         int pX = (int) geo.x() ;
         int pY = (int) geo.y() ;
+        bufferGraphics.setColor(Color.GREEN);
         bufferGraphics.drawString("Moves:" + _ar.getMoves() + "  Score:" + _ar.getGrade() + "  Level: "
                 + _ar.getGameLevel()+"  Time to end: "+_ar.getTimeToEnd()/1000+" sec", pX, pY-4);
 
