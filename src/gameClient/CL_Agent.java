@@ -194,11 +194,6 @@ public class CL_Agent {
 //	}
 
 
-
-
-
-
-
 	// end of test
 
 	public edge_data get_curr_edge() {
@@ -210,4 +205,9 @@ public class CL_Agent {
 	public void set_sg_dt(long _sg_dt) {
 		this._sg_dt = _sg_dt;
 	}
+
+
+
+
+
 }

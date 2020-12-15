@@ -143,7 +143,7 @@ public class MyFrame extends JFrame {
             if (c != null) {
 
                 geo_location fp = this._w2f.world2frame(c);
-                graphics2D.drawImage(agent,(int)fp.x()-r,(int)fp.y()-r,4*r,4*r,this);
+                graphics2D.drawImage(agent,(int)fp.x()-r,(int)fp.y()-(r+15),4*r,4*r,this);
 //                g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
             }
         }

@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ex2Client implements Runnable {
+    private static boolean pokOnEdge = false;
     private int gameLevel;
     private int grade;
     private int Moves;
+    private long minDt = 100 ;
     private long sleepTime;
-    private boolean getToDestntion;
     private static MyFrame window;
     private static Arena arena;
     private static dw_graph_algorithms algo;
@@ -37,22 +38,26 @@ public class Ex2Client implements Runnable {
         while (game.isRunning()) {
             moveAgants(game, grapicGame);
             String agentsString = game.getAgents();
-            List<CL_Agent> agentsList = Arena.getAgents(agentsString, grapicGame);
+            String pokemonsString = game.getPokemons();
+            List<CL_Agent> agentsList = arena.getAgents() ;
+            List<CL_Pokemon> pokemonList = arena.getPokemons() ;
             window.update(arena);
             try {
                 if (ind % 1 == 0) {
                     window.repaint();
                 }
-//                getToDestntion = true ;
-//                for (int i = 0; i < agentsList.size(); i++) {
-//                    if (agentsList.get(i).getMakeToDest() != -1) {
-//                        getToDestntion = false;
-//                        i = 0;
-//                    }
-//                    Thread.sleep(dt * 3);
+//                while (!makeToDest(agentsList)) {
+//                    Thread.sleep(dt*3);
 //                }
-                Thread.sleep(dt * 4);
-//                    ind++;
+            if(pokOnEdge){
+
+                game.move() ;
+                Thread.sleep(20);
+
+            }
+            else{
+                Thread.sleep(dt*3);
+            }
                 game.move();
 
             } catch (Exception e) {
@@ -129,7 +134,7 @@ public class Ex2Client implements Runnable {
 
     private static void moveAgants(game_service game, directed_weighted_graph gg) {
         int srcPok = 0;
-        boolean hasEdge = true;
+        pokOnEdge = false;
 //        String lg1 = game.move();
         String lg = game.getAgents();
         List<CL_Agent> agentsList = Arena.getAgents(lg, gg);
@@ -151,19 +156,11 @@ public class Ex2Client implements Runnable {
                     break;
                 }
                 srcPok = pok.get_edge().getSrc();
-//                Point3D p = pok.getLocation();
-//                gg.getE();
-//                p.close2equals();
-//                gg.getE().
-//                System.out.println(pok.get_edge());
-//                String s = game.getPokemons();
-//                dest = nextNode1(gg, src , pok.getLocation());
-
                 dest = nextNode(gg, src, srcPok, pok);
                 game.chooseNextEdge(ag.getID(), dest);
                 String res = game.toString();
                 System.out.println(res);
-                System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+                System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest+"   on edge "+pokOnEdge );
             }
         }
     }
@@ -172,6 +169,7 @@ public class Ex2Client implements Runnable {
         algo = new DWGraph_Algo();
         algo.init(g);
         if (src == pokSrc) {
+            pokOnEdge = true;;
             return pok.get_edge().getDest();
         }
         List<node_data> path = algo.shortestPath(src, pokSrc);
@@ -230,6 +228,20 @@ public class Ex2Client implements Runnable {
         }
     }
 
+    public boolean makeToDest(List<CL_Agent> agentsList) {
+        boolean res = true;
+        for (int i = 0; i < agentsList.size(); i++) {
+            if (agentsList.get(i).getMakeToDest() != -1) {
+                res = false;
+            }
+        }
+        return res;
+    }
+//    public boolean pokemonOnEdge (List<CL_Agent> agentsList , List<CL_Pokemon> pokemonList){
+//
+//
+//
+//    }
 
 }
 
