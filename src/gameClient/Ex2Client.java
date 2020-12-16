@@ -45,10 +45,14 @@ public class Ex2Client implements Runnable {
                     moveAgants(game, graphOfGame);
                 }
                 if(!checkAgentOnPokemonEdge()){
-                    int rnd = (int)(Math.random()*5 );
-                    Thread.sleep(rnd);
+//                    int rnd = (int)(Math.random()*5 );
+//                    Thread.sleep(rnd);
+                    double d = graphOfGame.getNode(agentsList.get(0).getSrcNode()).getLocation().distance(agentsList.get(0).get_curr_fruit().getLocation());
+                    d*=(agentsList.get(0).get_curr_fruit().get_edge().getWeight());
+                    d/=agentsList.get(0).getSpeed();
+                    Thread.sleep((int)d*100);
                 }
-                Thread.sleep(dt);
+//                Thread.sleep(dt);
 
             } catch (Exception e) {
                 e.printStackTrace();
