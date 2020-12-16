@@ -68,7 +68,6 @@ public class MyFrame extends JFrame {
         drawGraph(bufferGraphics);
         drawAgants(bufferGraphics);
         drawInfo(bufferGraphics);
-        bufferGraphics.setColor(Color.black);
         bufferGraphics.setFont(new Font("name", Font.PLAIN,16));
         geo_location geo = _w2f.getFrame().fromPortion(new Point3D(0,0,0)) ;
         int pX = (int) geo.x() ;

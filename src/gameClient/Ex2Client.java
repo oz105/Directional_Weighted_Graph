@@ -29,7 +29,7 @@ public class Ex2Client implements Runnable {
 
     @Override
     public void run() {
-        int levelGame = 5;
+        int levelGame = 11;
         game = Game_Server_Ex2.getServer(levelGame);
         game.login(207935214);
         init(game);

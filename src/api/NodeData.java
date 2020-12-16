@@ -2,6 +2,15 @@ package api;
 import gameClient.util.Point3D;
 import java.util.Objects;
 
+
+
+/**
+ * Class that represents Vertex in the directed weighted graph .
+ * there is COPY CONSTRUCTOR
+ * CONSTRUCTOR by Key
+ * and empty CONSTRUCTOR
+ */
+
 public class NodeData implements node_data  {
     private int key;
     private int tag;
@@ -51,27 +60,23 @@ public class NodeData implements node_data  {
     /**
      * Returns the location of this node, if
      * none return null.
-     *
      * @return
      */
     @Override
     public geo_location getLocation() {
-        return  position ;
+        return position ;
     }
 
     /**
      * Allows changing this node's location.
-     *
-     * @param p - new new location  (position) of this node.
+     * @param p - new location (position) of this node.
      */
     @Override
     public void setLocation(geo_location p) {
         this.position = p ;
     }
-
     /**
      * Returns the weight associated with this node.
-     *
      * @return
      */
     @Override
@@ -81,7 +86,6 @@ public class NodeData implements node_data  {
 
     /**
      * Allows changing this node's weight.
-     *
      * @param w - the new weight
      */
     @Override
@@ -91,7 +95,6 @@ public class NodeData implements node_data  {
 
     /**
      * Returns the remark (meta data) associated with this node.
-     *
      * @return
      */
     @Override
@@ -101,7 +104,6 @@ public class NodeData implements node_data  {
 
     /**
      * Allows changing the remark (meta data) associated with this node.
-     *
      * @param s
      */
     @Override
@@ -110,9 +112,8 @@ public class NodeData implements node_data  {
     }
 
     /**
-     * Temporal data (aka color: e,g, white, gray, black)
-     * which can be used be algorithms
-     *
+     * Temporal data which will be used in Dijkstra algorithms
+     * use for sign node if it already been visited.
      * @return
      */
     @Override
@@ -121,9 +122,8 @@ public class NodeData implements node_data  {
     }
 
     /**
-     * Allows setting the "tag" value for temporal marking an node - common
-     * practice for marking by algorithms.
-     *
+     * Allows setting the "tag" value for marking an node
+     * used in Dijkstra algorithms , if tag = -1 -> means have not been visited yet.
      * @param t - the new value of the tag
      */
     @Override
@@ -132,6 +132,11 @@ public class NodeData implements node_data  {
     }
 
 
+    /**
+     * This method check if both node data
+     * equals , return true only if they are equals
+     * false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

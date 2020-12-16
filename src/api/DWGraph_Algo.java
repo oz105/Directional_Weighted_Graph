@@ -1,10 +1,10 @@
 package api;
-
 import java.io.*;
 import java.util.*;
-
 import com.google.gson.*;
 import gameClient.util.Point3D;
+
+
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gAlgo;
@@ -46,8 +46,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     /**
      * Returns true if and only if (iff) there is a valid path from each node to each
-     * other node. NOTE: assume directional graph (all n*(n-1) ordered pairs).
-     *
+     * other node.
+     *Returns true if and only if (iff) there is a valid path from EVREY node to each
+     * other node. NOTE: assume directional graph.
+     * Used BFS algorithm form both ways one time on the regular edges of the graph
+     * and secound time on the reverse edges of the graph
+     * if both checks return true we will say this graph is Connected.
      * @return
      */
     @Override
@@ -63,15 +67,14 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             temp = node;
             break;
         }
-        boolean test1 = this.bfs(temp);
-        return test1;
+        return bfs(temp);
 
     }
 
     /**
      * returns the length of the shortest path between src to dest
      * Note: if no such path --> returns -1
-     *
+     * Use Dijkstra algorithm
      * @param src  - start node
      * @param dest - end (target) node
      * @return
@@ -91,7 +94,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     /**
      * returns the the shortest path between src to dest - as an ordered List of nodes:
      * src--> n1-->n2-->...dest
-     * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+     * Use Dijkstra algorithm
      * Note if no such path --> returns null;
      *
      * @param src  - start node
@@ -221,6 +224,9 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return false;
     }
 
+    /**
+     * NEED TO BE FILL EXPLAIN
+     */
     public boolean bfs(node_data node) {
         for (node_data n : this.gAlgo.getV()) {
             n.setTag(-1);
@@ -277,7 +283,28 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return counter == gAlgo.getV().size();
 
     }
-
+    /**
+     * Dijkstra Algorithm
+     * in this method we will mark all the nodes as unvisited (tag =  -1 -> means unvisited )
+     * and we will mark the weight of every node as infinity (weight = Integer.MAX_VALUE)
+     * and we put in the info of the node from how he get his weight (info = "n.getKey")
+     * we will create a PriorityQueue that will be give Priority base on the smallest weight
+     * During the algorithm for every node we will saved 3 things
+     * his weight form the src node - this will be store in the weight
+     * and from who he gets that weight - this will be store in the info (the key of the node)
+     * and if this node already been visited - this will be store in the tag .
+     * and when we first visit in some node (means his tag = -1)
+     * we add him to the PriorityQueue .
+     * the algorithm ends when the PriorityQueue is empty .
+     * In the end of the algorithm each node will hold 3 things
+     * 1.the smallest weight from src node - will be store in the weight.
+     * 2.from who he gets this weight - will be store in the Info.
+     * 3.if this node already been visited - this will be store in the tag (if tag != -1 -> means visited).
+     * if the Info contains a number
+     * (the key from who he gets his weight its means he he already have been visited).
+     * @param src
+     * @return
+     */
     public int Dijkstra(node_data src) {
         double weight = 0;
         int countVisit = 0;
@@ -316,7 +343,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return countVisit;
     }
 
-    //equals with override when we will use assert equals
+    /**
+     * This method check if both algorithms graph
+     * equals , return true only if they are
+     * false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

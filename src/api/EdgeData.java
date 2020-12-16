@@ -2,6 +2,13 @@ package api;
 
 import java.util.Objects;
 
+
+/**
+ * Class that represents Edges between Vertex in the directed weighted graph .
+ * there is COPY CONSTRUCTOR
+ * and empty CONSTRUCTOR
+ */
+
 public class EdgeData implements edge_data {
     private int src, dest, tag;
     private double weight;
@@ -26,9 +33,7 @@ public class EdgeData implements edge_data {
     }
 
     /**
-     * The id of the source node of this edge.
-     *
-     * @return
+     * @return The id of the source node of this edge.
      */
     @Override
     public int getSrc() {
@@ -36,9 +41,7 @@ public class EdgeData implements edge_data {
     }
 
     /**
-     * The id of the destination node of this edge
-     *
-     * @return
+     * @return The id of the destination node of this edge .
      */
     @Override
     public int getDest() {
@@ -54,9 +57,7 @@ public class EdgeData implements edge_data {
     }
 
     /**
-     * Returns the remark (meta data) associated with this edge.
-     *
-     * @return
+     * @return the remark (meta data) associated with this edge.
      */
     @Override
     public String getInfo() {
@@ -65,7 +66,6 @@ public class EdgeData implements edge_data {
 
     /**
      * Allows changing the remark (meta data) associated with this edge.
-     *
      * @param s
      */
     @Override
@@ -74,10 +74,8 @@ public class EdgeData implements edge_data {
     }
 
     /**
-     * Temporal data (aka color: e,g, white, gray, black)
+     * @return Temporal data (aka color: white,black..)
      * which can be used be algorithms
-     *
-     * @return
      */
     @Override
     public int getTag() {
@@ -87,7 +85,6 @@ public class EdgeData implements edge_data {
     /**
      * This method allows setting the "tag" value for temporal marking an edge - common
      * practice for marking by algorithms.
-     *
      * @param t - the new value of the tag
      */
     @Override
@@ -95,6 +92,11 @@ public class EdgeData implements edge_data {
         this.tag = t;
     }
 
+    /**
+     * This method check if both edge data
+     * equals , return true only if they are equals
+     * false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
