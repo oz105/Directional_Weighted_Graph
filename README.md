@@ -15,7 +15,7 @@
 
 
 
-In this Project there is 3 Classes : WGraph_DS , WGraph_Algo ,node_infoCompereByTag and there is 3 interfaces : node_info , weighted_graph, weighted_graph_algorithms and we have directory of test ,All together they implement a directed weighted graph which functions such as add new node to the graph , set an edge between 2 nodes and give the edge weight checking if it connected or what is the shorthest path between 2 nodes and more.
+In this Project there is implemention of a directed weighted graph which functions such as add new node to the graph , set an edge between 2 nodes and give the edge weight checking if it connected or what is the shorthest path between 2 nodes and more.
 
 NodeData
 This is a class implements the node_data interface and create a new type of object. In this class we created a new object named node_data that contains integer keyMaker, that gives every new node_data a unique value named key.
@@ -63,7 +63,7 @@ There is a Boolean method that checks if the g of this GraphAlgo is connected. T
 
 #### Dijkstra 
 
-this method implements the Dijkstra algorithm .
+this method implements the Dijkstra algorithm.
 in this method we will mark all the nodes as unvisited (Tag = 0 -> means unvisited)
 and we will mark the weight of every node as infinity (Weight = Double.MAX_VALUE)
 we will create a PriorityQueue that will be give Priority base on the smallest weight
