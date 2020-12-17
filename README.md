@@ -1,7 +1,7 @@
 # Directional_Weighted_Graph
 
 
-### Directional weighted graph is a graph that is made up of a set of vertices connected by edges, where the edges have a direction associated with them.
+### Directed weighted graph is a graph that is made up of a set of vertices connected by edges, where the edges have a direction associated with them.
 
 
 
@@ -15,13 +15,9 @@
 
 
 
+In this Project there is 3 Classes : WGraph_DS , WGraph_Algo ,node_infoCompereByTag and there is 3 interfaces : node_info , weighted_graph, weighted_graph_algorithms and we have directory of test ,All together they implement a directed weighted graph which functions such as add new node to the graph , set an edge between 2 nodes and give the edge weight checking if it connected or what is the shorthest path between 2 nodes and more.
 
-// leftovers
-There is also a method to connect nodes, separate nodes, or even to check if two nodes are connected.
-  which keep track of the number of edges in the graph, 
-
-
-node_data
+NodeData
 This is a class implements the node_data interface and create a new type of object. In this class we created a new object named node_data that contains integer keyMaker, that gives every new node_data a unique value named key.
 every node also contains an integer named tag and a double named weight (which will be used in the next classes), a String named info and a geo_location field named position that save the location of the node in a two dimension space.
 In this class there are methods to update the tag, the info, the weight, to get a given node's key value, info, neib nodes and tag.
