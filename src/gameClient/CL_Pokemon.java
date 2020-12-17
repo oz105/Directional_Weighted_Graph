@@ -10,7 +10,7 @@ public class CL_Pokemon {
 	private Point3D _pos;
 	private double min_dist;
 	private int min_ro;
-	private int target ; // if this worth 1 it means there is already agent sent to him .
+	private boolean target ; // if this true it means there is already agent sent to him .
 
 	public CL_Pokemon(Point3D p, int t, double v, double s, edge_data e) {
 		_type = t;
@@ -20,7 +20,7 @@ public class CL_Pokemon {
 		_pos = p;
 		min_dist = -1;
 		min_ro = -1;
-		target = 0 ;
+		target = false ;
 	}
 	public static CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;
@@ -66,10 +66,10 @@ public class CL_Pokemon {
 		this.min_ro = min_ro;
 	}
 
-	public int getTarget() {
+	public boolean getTarget() {
 		return target;
 	}
 	public void targetd() {
-		this.target = 1;
+		this.target = true;
 	}
 }
