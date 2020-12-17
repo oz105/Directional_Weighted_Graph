@@ -11,15 +11,16 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Ex2Client implements Runnable {
     private static HashMap<Integer, HashMap<Integer, List<node_data>>> graphPaths;
-    private static HashMap<Integer, HashMap<Integer, List<edge_data>>> graphEdgesPaths;
     private static HashMap<Integer, HashMap<Integer, Double>> graphWeights;
+    private static HashMap<Integer, List<node_data>> agentsPath;
+    private static HashMap<Integer, CL_Pokemon> agentsAndPokemon;
     private static List<CL_Pokemon> pokemonsList;
     private static List<CL_Agent> agentsList;
-    private static boolean pokOnEdge = false;
     private static MyFrame window;
     private static Arena arena;
     private static dw_graph_algorithms algo;
@@ -29,11 +30,20 @@ public class Ex2Client implements Runnable {
     private int grade;
     private int Moves;
 
+    public Ex2Client(String level) {
+        int after_parse = 0;
+        try {
+            after_parse = Integer.parseInt(level);
+        } catch (NumberFormatException e) {
+            System.out.println("level should be int");
+        }
+        gameLevel = after_parse;
+    }
+
 
     @Override
     public void run() {
-        int levelGame = 23;
-        game = Game_Server_Ex2.getServer(levelGame);
+        game = Game_Server_Ex2.getServer(gameLevel);
 //        game.login(207935214);
         init(game);
         game.startGame();
@@ -49,19 +59,8 @@ public class Ex2Client implements Runnable {
                 synchronized (this) {
                     moveAgants(game, graphOfGame);
                 }
+                Thread.sleep(100);
 
-                CL_Agent temp_agent = null;
-                CL_Pokemon temp_pok = null;
-                edge_data temp_edge = null;
-                if (!(noAgentOnPokemonEdge())) {
-//                    Thread.sleep((int) ((Math.random() + 1) * 25));
-////                    int rnd = (int)(Math.random()*5 );
-////                    Thread.sleep(rnd);
-                    double d = sleepTime();
-                    Thread.sleep((int) d * 100);
-                } else {
-                    Thread.sleep(150);
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,15 +96,14 @@ public class Ex2Client implements Runnable {
 
     private void moveAgants(game_service game, directed_weighted_graph g) {
         int srcPok = 0;
-        pokOnEdge = false;
         String agentsMove = game.move(); // Use max 10 times in 1 sec .
         agentsList = Arena.getAgents(agentsMove, g);
         arena.setAgents(agentsList);
         pokemonsList = Arena.json2Pokemons(game.getPokemons());
+        arena.setPokemons(pokemonsList);
         for (CL_Pokemon pok : pokemonsList) {
             arena.updateEdge(pok, g);
         }
-        arena.setPokemons(pokemonsList);
         for (CL_Agent agent : agentsList) {
             agent.setOnPokemonEdge(false);
             int id = agent.getID();
@@ -115,23 +113,67 @@ public class Ex2Client implements Runnable {
             if (dest == -1) {
                 synchronized (Thread.currentThread()) {
                     CL_Pokemon pok = findValuestPokemon(src);
+                    agent.set_curr_fruit(pok);
                     srcPok = pok.get_edge().getSrc();
                     dest = nextNode(agent, srcPok, pok);
-                    if(agentsSameDest(agent , dest)){
-                        dest = (int)((Math.random())*graphOfGame.nodeSize());
+                    if (agentsSameDest(agent, dest)) {
+                        dest = (int) ((Math.random()) * graphOfGame.nodeSize());
                     }
                     game.chooseNextEdge(agent.getID(), dest);
                 }
             }
-            System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest + "   on edge " + pokOnEdge);
+            System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 
         }
     }
 
+    private void moveAgantsNum2(game_service game, directed_weighted_graph g) throws InterruptedException {
+        int srcPok = 0;
+        String agentsMove = game.move(); // Use max 10 times in 1 sec .
+        agentsList = Arena.getAgents(agentsMove, g);
+        arena.setAgents(agentsList);
+        pokemonsList = Arena.json2Pokemons(game.getPokemons());
+        arena.setPokemons(pokemonsList);
+        for (CL_Pokemon pok : pokemonsList) {
+            arena.updateEdge(pok, g);
+        }
+        for (CL_Agent agent : agentsList) {
+            agent.setOnPokemonEdge(false);
+            int id = agent.getID();
+            int dest = agent.getNextNode();
+            int src = agent.getSrcNode();
+            double v = agent.getValue();
+            if (!(agent.isHunt())) {
+                CL_Pokemon pok = findValuestPokemon(src);
+                agent.set_curr_fruit(pok);
+                agentsAndPokemon.put(id, pok);
+                agent.setHunt(true);
+                srcPok = pok.get_edge().getSrc();
+                dest = nextNode(agent, srcPok, pok);
+                game.chooseNextEdge(agent.getID(), dest);
+            } else {
+                dest = nextNode(agent, srcPok, agentsAndPokemon.get(id));
+                game.chooseNextEdge(agent.getID(), dest);
+            }
+            System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+        }
+    }
+
+    public long minTime() {
+        long min = 150;
+        for (CL_Agent agent : agentsList) {
+
+            if (min < agent.get_sg_dt()) {
+                min = agent.get_sg_dt();
+            }
+        }
+        return min;
+    }
+
     private int nextNode(CL_Agent a, int pokSrc, CL_Pokemon pok) {
         if (a.getSrcNode() == pokSrc) {
-            pokOnEdge = true;
             a.setOnPokemonEdge(true);
+            a.setHunt(false);
             pok.targetd();
             return pok.get_edge().getDest();
         }
@@ -169,16 +211,17 @@ public class Ex2Client implements Runnable {
         }
         return pokemonsList.get(index);
     }
-    public double sleepTime (){
-        geo_location srcLocation = graphOfGame.getNode(agentsList.get(0).getSrcNode()).getLocation() ;
-        if(agentsList.get(0).get_curr_fruit() != null ){
-            geo_location furitLocation =agentsList.get(0).get_curr_fruit().getLocation() ;
-            double d = srcLocation.distance(furitLocation) ;
+
+    public double sleepTime() {
+        geo_location srcLocation = graphOfGame.getNode(agentsList.get(0).getSrcNode()).getLocation();
+        if (agentsList.get(0).get_curr_fruit() != null) {
+            geo_location furitLocation = agentsList.get(0).get_curr_fruit().getLocation();
+            double d = srcLocation.distance(furitLocation);
             d *= (agentsList.get(0).get_curr_fruit().get_edge().getWeight());
             d /= agentsList.get(0).getSpeed();
-            return d ;
+            return d;
         }
-        return 1 ;
+        return 1;
     }
 
     public void refresh() {
@@ -215,17 +258,21 @@ public class Ex2Client implements Runnable {
         return tempPokemon;
     }
 
-    public double timeToEatPokemon(CL_Agent agent, CL_Pokemon pok) {
-        double agent_speed = agent.getSpeed();
-        double edge_weight = pok.get_edge().getWeight();
-        geo_location pok_location = pok.getLocation();
-        geo_location agent_location = agent.getLocation();
-        double dis = agent_location.distance(pok_location);
-//        if (edge_weight * dis / agent_speed < 2){
-//
-//            return true;
-//        }
-        return ((edge_weight * dis) / agent_speed);
+    public long timeToEatPokemon(CL_Agent agent, CL_Pokemon pok) {
+        if (agent.get_curr_edge() != null) {
+            if (agent.get_curr_edge().equals(pok.get_edge())) {
+                long res = 0;
+                double agent_speed = agent.getSpeed();
+                double edge_weight = pok.get_edge().getWeight();
+                geo_location src = graphOfGame.getNode(pok.get_edge().getSrc()).getLocation();
+                geo_location dest = graphOfGame.getNode(pok.get_edge().getDest()).getLocation();
+                double dist_src_to_dest = src.distance(dest);
+                double dis = agent.getLocation().distance(pok.getLocation());
+                res = (long) (((edge_weight * (dis / dist_src_to_dest))) / agent_speed);
+                return res;
+            }
+        }
+        return 120;
     }
 
     public boolean noAgentOnPokemonEdge() {
@@ -239,15 +286,15 @@ public class Ex2Client implements Runnable {
         return res;
     }
 
-    public boolean agentsSameDest(CL_Agent agent , int dest) {
+    public boolean agentsSameDest(CL_Agent agent, int dest) {
         for (CL_Agent a : agentsList) {
-            if (a.get_curr_edge() != null ) {
-                if (a.get_curr_edge().getDest()==dest) {
-                    return true ;
+            if (a.get_curr_edge() != null) {
+                if (a.get_curr_edge().getDest() == dest) {
+                    return true;
                 }
             }
         }
-        return false ;
+        return false;
     }
 
     public void pokemonOnThePath(List<node_data> path) {
@@ -278,7 +325,6 @@ public class Ex2Client implements Runnable {
         graphWeights = new HashMap<Integer, HashMap<Integer, Double>>();
         for (node_data n : g.getV()) {
             HashMap<Integer, List<node_data>> tempMap = new HashMap<>();
-            HashMap<Integer, List<edge_data>> tempMap3 = new HashMap<>();
             HashMap<Integer, Double> tempMap2 = new HashMap<>();
             graphPaths.put(n.getKey(), tempMap);
             graphWeights.put(n.getKey(), tempMap2);
@@ -294,6 +340,8 @@ public class Ex2Client implements Runnable {
     }
 
     public void initStartNodeOfAgents() {
+        agentsPath = new HashMap<Integer, List<node_data>>();
+        agentsAndPokemon = new HashMap<Integer, CL_Pokemon>();
         String gameInfo = game.toString();
         JSONObject jsonObject;
         try {
