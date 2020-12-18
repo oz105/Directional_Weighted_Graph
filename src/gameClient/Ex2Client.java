@@ -30,7 +30,7 @@ public class Ex2Client implements Runnable {
     private int Moves;
 
 
-    @Override
+//    @Override
     public void run() {
         int levelGame = 23;
         game = Game_Server_Ex2.getServer(levelGame);
@@ -175,11 +175,11 @@ public class Ex2Client implements Runnable {
 //        return pokIndex;
 //    }
 
-    // לנסות לבחור לפוקימונים סוכנים לפי מי הכי קרוב אליהם
+    // ׳׳ ׳¡׳•׳× ׳׳‘׳—׳•׳¨ ׳׳₪׳•׳§׳™׳׳•׳ ׳™׳ ׳¡׳•׳›׳ ׳™׳ ׳׳₪׳™ ׳׳™ ׳”׳›׳™ ׳§׳¨׳•׳‘ ׳׳׳™׳”׳
     public  void pockToAgent(){
         int [] indxOfPock = new int[agentsList.size()];
         for (int i = 0; i < agentsList.size(); i++) {
-                indxOfPock[i] = -1;
+            indxOfPock[i] = -1;
 
         }
         int counterOfPockNum = 0;

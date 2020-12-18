@@ -1,10 +1,23 @@
 # Directional_Weighted_Graph
-// leftovers
-There is also a method to connect nodes, separate nodes, or even to check if two nodes are connected.
-  which keep track of the number of edges in the graph, 
 
 
-node_data
+### Directed weighted graph is a graph that is made up of a set of vertices connected by edges, where the edges have a direction associated with them.
+
+
+
+![alt text](https://i.stack.imgur.com/YC8LA.gif)
+
+
+
+
+
+
+
+
+
+In this Project there is implemention of a directed weighted graph which functions such as add new node to the graph , set an edge between 2 nodes and give the edge weight checking if it connected or what is the shorthest path between 2 nodes and more.
+
+NodeData
 This is a class implements the node_data interface and create a new type of object. In this class we created a new object named node_data that contains integer keyMaker, that gives every new node_data a unique value named key.
 every node also contains an integer named tag and a double named weight (which will be used in the next classes), a String named info and a geo_location field named position that save the location of the node in a two dimension space.
 In this class there are methods to update the tag, the info, the weight, to get a given node's key value, info, neib nodes and tag.
@@ -14,7 +27,7 @@ This class implements the interface edge_data. It represents a connction between
 One integer is the source of the edge- named src, the other integer is the destination node- named dest, and the double given is the weight between those two nodes. There is a string field named info that save information about this edge, the last field is an integer value that used in the next algorithms.
 There are methods to get the weight, the dest, the src, the tag or the info value and to set a new info or tag.
 
-Graph_DS
+DWGraph_DS
 This class implements the interface directed_weighted_graph, and create a new type of object. The graph is scaled, which means that connection between two nodes isn't symmetric.
 
 The new type contains HashMap named verticesOfGraph, of node_data as value and integer as key, which holds within in all the node_datas that that graph holds, while creating a new graph the class initialized the HashMap to be empty.
@@ -31,10 +44,16 @@ Other method named removeNode gets a key value, we use the method get from node_
 There is also a method that remove an edge between two node_datas, given two integers. First, we check if they even exist- if not we return null, if they do than we check if there is a connection between them to separate, if there is than by using the removeNode from the node_data class we remove one from the other's neib HashMap.
 There are also methods named nodeSize, that returns the number of node_datas in allNodes, edgeSize that return the counter edgeSize and getMC that returns the counter modeCount. There us a method that returns the number of nodes in the graph, that called nodeSize, and it returns the number of values in the verticesOfGraph HashMap.
 
+
+![alt text](https://www.researchgate.net/publication/337070671/figure/fig2/AS:865839351857152@1583443596094/An-example-of-directed-weighted-graph.png)
+
 Graph_Algo
 This class implements the interface dw_graph_algorithms, it creates a new type, that contains only a private graph named gAlgo.
 This class contains methods that help the user to get information about the graph and about nodes and edges in it.
 There are contractors of empty graphAlgo that is empty, there is a copy constructure that do a deep copy, and there is the init copy that do a shallow copy of the graphs.
+
+#### BFS 2 Ways 
+
 First of all, there is a method that didn't come from the interface, but if helps the method that the interface does contain. This boolean method named bfs, it gets a node named node from the graph, first we change all of the tags of the nodes in the graph to -1. Then, by using a queue named q, we change the tag of every node we get to 1, very time the bfs changes a node's tag is add it to the q. We start with the original node, put it in the q and that start a loop going throw all of his neighbors and set their tag to be 1, adding them to the q, we keep a counter that represent the number of nodes we have seen so far. At the end of the original node neighbors, we take him out of the q, and start going throw the next node in the q's neighbors. We do so again and again, count the nodes we have seen until the q is empty, then we know we have reached every node possible.
 If the counter equals to the number of nodes in the graph than we found a node that has path to every other node in the graph, and the tags of all the nodes are 1.
 Then the bfs restart the counter and the q, and it do all the process again only this time he go through all the reverse edges in the graph and count all the nodes we have seen so far, this time the tag will change to 2. 
@@ -42,9 +61,36 @@ By that we check if there's a path from every node in the graph to the given nod
 Then the bfs algorithm ends and return true if the counter equals to the number of nodes in the graph.
 There is a Boolean method that checks if the g of this GraphAlgo is connected. This method uses the bfs algorithm by sending a random node. If the bfs return true if the graph, and false if it's not.
 
-***************************************************Dijkstra
+#### Dijkstra 
+
+this method implements the Dijkstra algorithm.
+in this method we will mark all the nodes as unvisited (Tag = 0 -> means unvisited)
+and we will mark the weight of every node as infinity (Weight = Double.MAX_VALUE)
+we will create a PriorityQueue that will be give Priority base on the smallest weight
+During the algorithm for every node we will saved 3 things
+his weight form the src node - this will be store in the weight
+and from who he gets that weight - this will be store in the info (the key of the node)
+and if we visit in some node - this will be store in the tag.
+and when we first visit in some node (means his tag = 0 )
+we add him to the PriorityQueue .
+the algorithm ends when the PriorityQueue is empty .
+In the end of the algorithm each node will hold 3 things
+1.the smallest weight from src node - will be store in the weight.
+2.from who he gets this weight - will be store in the Info.
+3.if the node have been visited or not - will hold in the tag.
+
+
+
 There is a method shortestPathDist that returns the smallest weight of path between two give nodes. It sends one of them to the Dijkstra algorithm, and return the tag of the other. If there is no path then the default number will be -1, because the bfs didn't reach that node.
 The least method is shortestPath that returns a list of all the nodes between two given node's keys. If there are no nodes with those keys in the graph it returns null, if there is then if there is no path it would return an empty list, if they have a path if would send one to the bfs algorithm, and in a loop would start from the other node  and add every node that have the next number of tag- by that we go throw the other node, then the next in the graph, then the next until we reach the first node.
+
+as we can see in the photo there is alot of ways between node 3 to node 11 but there is shoretes path.
+
+
+![alt text](https://www.researchgate.net/profile/Trong_Do/publication/224234542/figure/fig2/AS:393713277784066@1470879968319/a-Weighted-directed-graph-topology-scenario-2.png)
+
+
+
 
 
 

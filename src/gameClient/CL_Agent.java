@@ -22,6 +22,7 @@ public class CL_Agent {
 	private CL_Pokemon _curr_fruit;
 	private long _sg_dt;
 	private boolean onPokemonEdge ;
+	private boolean hunt ;
 
 	private double _value;
 
@@ -33,6 +34,7 @@ public class CL_Agent {
 		_pos = _curr_node.getLocation();
 		_id = -1;
 		onPokemonEdge = false ;
+		hunt = false ;
 		setSpeed(0);
 	}
 	public void update(String json) {
@@ -154,7 +156,6 @@ public class CL_Agent {
 			double dist = _pos.distance(dest);
 			if(this.get_curr_fruit().get_edge()==this.get_curr_edge()) {
 				dist = _curr_fruit.getLocation().distance(this._pos);
-
 			}
 			double norm = dist/de;
 			double dt = w*norm / this.getSpeed();
@@ -172,6 +173,14 @@ public class CL_Agent {
 	}
 	public void setOnPokemonEdge(boolean onPokemonEdge) {
 		this.onPokemonEdge = onPokemonEdge;
+	}
+
+	public boolean isHunt() {
+		return hunt;
+	}
+
+	public void setHunt(boolean hunted) {
+		this.hunt = hunted;
 	}
 
 	public edge_data get_curr_edge() {
