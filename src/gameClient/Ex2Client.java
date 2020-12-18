@@ -29,11 +29,19 @@ public class Ex2Client implements Runnable {
     private int grade;
     private int Moves;
 
+    public Ex2Client(String level) {
+        int after_parse ;
+        try{
+            after_parse = Integer.parseInt(level);
+            this.gameLevel = after_parse ;
+        } catch (NumberFormatException e) {
+            System.out.println("the level should be only numbers");
+        }
+    }
 
-//    @Override
+    @Override
     public void run() {
-        int levelGame = 23;
-        game = Game_Server_Ex2.getServer(levelGame);
+        game = Game_Server_Ex2.getServer(gameLevel);
 //        game.login(207935214);
         init(game);
         game.startGame();
