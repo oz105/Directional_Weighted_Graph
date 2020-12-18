@@ -50,15 +50,15 @@ public class Ex2Client implements Runnable {
                     moveAgants(game, graphOfGame);
                 }
 
-                CL_Agent temp_agent = null;
-                CL_Pokemon temp_pok = null;
-                edge_data temp_edge = null;
+//                CL_Agent temp_agent = null;
+//                CL_Pokemon temp_pok = null;
+//                edge_data temp_edge = null;
                 if (!(noAgentOnPokemonEdge())) {
 //                    Thread.sleep((int) ((Math.random() + 1) * 25));
 ////                    int rnd = (int)(Math.random()*5 );
 ////                    Thread.sleep(rnd);
-                    double d = sleepTime();
-                    Thread.sleep((int) d * 100);
+//                    double d = sleepTime();
+//                    Thread.sleep((int) d * 100);
                 } else {
                     Thread.sleep(150);
                 }
@@ -112,15 +112,17 @@ public class Ex2Client implements Runnable {
             int dest = agent.getNextNode();
             int src = agent.getSrcNode();
             double v = agent.getValue();
+            pockToAgent();
             if (dest == -1) {
                 synchronized (Thread.currentThread()) {
-                    CL_Pokemon pok = findValuestPokemon(src);
-                    srcPok = pok.get_edge().getSrc();
-                    dest = nextNode(agent, srcPok, pok);
-                    if(agentsSameDest(agent , dest)){
-                        dest = (int)((Math.random())*graphOfGame.nodeSize());
-                    }
-                    game.chooseNextEdge(agent.getID(), dest);
+//                    CL_Pokemon pok = findValuestPokemon(src);
+//                    srcPok = pok.get_edge().getSrc();
+//                    dest = nextNode(agent, srcPok, pok);
+//                    if(agentsSameDest(agent , dest)){
+//                        dest = (int)((Math.random())*graphOfGame.nodeSize());
+//                    }
+                    int next_node = graphPaths.get(agent.getSrcNode()).get(agent.get_curr_fruit().get_edge().getDest()).get(1).getKey();
+                    game.chooseNextEdge(agent.getID(), next_node);
                 }
             }
             System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest + "   on edge " + pokOnEdge);
@@ -144,6 +146,7 @@ public class Ex2Client implements Runnable {
         double max = 0;
         double dis;
         double valueWithDis;
+//        boolean
         for (int i = 0; i < pokemonsList.size(); i++) {
             dis = graphWeights.get(srcAgent).get(pokemonsList.get(i).get_edge().getSrc());
             valueWithDis = (pokemonsList.get(i).getValue() / dis);
@@ -154,6 +157,60 @@ public class Ex2Client implements Runnable {
         }
         pokemonsList.get(pokIndex).targetd();
         return pokemonsList.get(pokIndex);
+    }
+//    public int findValuestPokemon(int srcAgent) {
+//        int pokIndex = 0;
+//        double max = 0;
+//        double dis;
+//        double valueWithDis;
+//        for (int i = 0; i < pokemonsList.size(); i++) {
+//            dis = graphWeights.get(srcAgent).get(pokemonsList.get(i).get_edge().getSrc());
+//            valueWithDis = (pokemonsList.get(i).getValue() / dis);
+//            if (valueWithDis > max) {
+//                max = valueWithDis;
+//                pokIndex = i;
+//            }
+//        }
+//        pokemonsList.get(pokIndex).targetd();
+//        return pokIndex;
+//    }
+
+    // לנסות לבחור לפוקימונים סוכנים לפי מי הכי קרוב אליהם
+    public  void pockToAgent(){
+        int [] indxOfPock = new int[agentsList.size()];
+        for (int i = 0; i < agentsList.size(); i++) {
+                indxOfPock[i] = -1;
+
+        }
+        int counterOfPockNum = 0;
+//        int counterOfAgentsNum = 0;
+        int counterOfTakenAgents=0;
+        for(CL_Pokemon pock : pokemonsList){
+            double minDis = -1;
+            int minDisIndx = -1;
+            counterOfPockNum++;
+            int counterOfAgentsNum = 0;
+            for(CL_Agent agent : agentsList){
+                counterOfAgentsNum++;
+
+                double dis= algo.shortestPathDist(pock.get_edge().getSrc(), agent.getSrcNode());
+                if(minDis < dis || minDis == -1){
+                    minDis = dis;
+                    minDisIndx = counterOfAgentsNum-1;
+                }
+            }
+            indxOfPock[minDisIndx]= counterOfPockNum;
+            agentsList.get(minDisIndx).set_curr_fruit(pock);
+        }
+
+        for (int i = 0; i < agentsList.size(); i++) {
+            if(indxOfPock[i]==-1){
+//                int j = findValuestPokemon(i);
+//                indxOfPock[i] = j;
+                agentsList.get(i).set_curr_fruit(findValuestPokemon(i));
+            }
+        }
+
     }
 
     public CL_Pokemon findClosetPokemon(int srcAgent) {
@@ -172,8 +229,8 @@ public class Ex2Client implements Runnable {
     public double sleepTime (){
         geo_location srcLocation = graphOfGame.getNode(agentsList.get(0).getSrcNode()).getLocation() ;
         if(agentsList.get(0).get_curr_fruit() != null ){
-            geo_location furitLocation =agentsList.get(0).get_curr_fruit().getLocation() ;
-            double d = srcLocation.distance(furitLocation) ;
+            geo_location fruitLocation =agentsList.get(0).get_curr_fruit().getLocation() ;
+            double d = srcLocation.distance(fruitLocation) ;
             d *= (agentsList.get(0).get_curr_fruit().get_edge().getWeight());
             d /= agentsList.get(0).getSpeed();
             return d ;
