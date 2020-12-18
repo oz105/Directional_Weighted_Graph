@@ -77,7 +77,7 @@ the algorithm ends when the PriorityQueue is empty .
 In the end of the algorithm each node will hold 3 things
 1.the smallest weight from src node - will be store in the weight.
 2.from who he gets this weight - will be store in the Info.
-3.if the node have been visited or not - will hold in the tag
+3.if the node have been visited or not - will hold in the tag.
 
 
 
