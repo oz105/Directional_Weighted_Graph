@@ -27,7 +27,7 @@ This class implements the interface edge_data. It represents a connction between
 One integer is the source of the edge- named src, the other integer is the destination node- named dest, and the double given is the weight between those two nodes. There is a string field named info that save information about this edge, the last field is an integer value that used in the next algorithms.
 There are methods to get the weight, the dest, the src, the tag or the info value and to set a new info or tag.
 
-Graph_DS
+DWGraph_DS
 This class implements the interface directed_weighted_graph, and create a new type of object. The graph is scaled, which means that connection between two nodes isn't symmetric.
 
 The new type contains HashMap named verticesOfGraph, of node_data as value and integer as key, which holds within in all the node_datas that that graph holds, while creating a new graph the class initialized the HashMap to be empty.
