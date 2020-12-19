@@ -25,7 +25,6 @@ public class Ex2Client implements Runnable {
     private int gameLevel;
     private int grade;
     private int Moves;
-    private static double min = -1;
     private static HashMap<Integer, CL_Pokemon> takenPock = new HashMap<>();
 
     public Ex2Client(String level) {
@@ -108,12 +107,9 @@ public class Ex2Client implements Runnable {
             arena.updateEdge(pok, g);
         }
         arena.setPokemons(pokemonsList);
-        min = -1;
         for (CL_Agent agent : agentsList) {
-            int id = agent.getID();
             int dest = agent.getNextNode();
             int src = agent.getSrcNode();
-            double v = agent.getValue();
             if (dest == -1) {
                 agent.setOnPokemonEdge(false);
                 synchronized (Thread.currentThread()) {
@@ -202,7 +198,6 @@ public class Ex2Client implements Runnable {
         if (min != -1 && dist != 0) {
             return min;
         }
-
         return 100;
     }
 
@@ -230,13 +225,11 @@ public class Ex2Client implements Runnable {
     }
 
     //Functions for init
-
     public void initGraphPathsAndWeights(directed_weighted_graph g) {
         graphPaths = new HashMap<Integer, HashMap<Integer, List<node_data>>>();
         graphWeights = new HashMap<Integer, HashMap<Integer, Double>>();
         for (node_data n : g.getV()) {
             HashMap<Integer, List<node_data>> tempMap = new HashMap<>();
-            HashMap<Integer, List<edge_data>> tempMap3 = new HashMap<>();
             HashMap<Integer, Double> tempMap2 = new HashMap<>();
             graphPaths.put(n.getKey(), tempMap);
             graphWeights.put(n.getKey(), tempMap2);

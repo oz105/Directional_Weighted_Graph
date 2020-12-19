@@ -12,15 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-// צעדים שיאכל כבר בפעם הראשונה
-// גרף לא קשיר, שלא ייכנס לקודקוד שאין ממנו צלעות
-// אולי רק לאיפה שיש מעגל
-
-// להוסיף RESIZE
-// להוסיף אינט שיזכור את הקודקוד האחרון שהיה בו כדי למנוע מנצב בו הוא הולך שוב ושוב על אותה הצלע
-// רידמי וכו
-
-
 public class Ex2 implements ActionListener {
     private static JLabel idLabel;
     private static JTextField idText;
