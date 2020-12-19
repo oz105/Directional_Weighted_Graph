@@ -28,12 +28,14 @@ public class Ex2Client implements Runnable {
     private int gameLevel;
     private int grade;
     private int Moves;
+    private static double min = -1;
+    private static HashMap<Integer, CL_Pokemon> takenPock = new HashMap<>();
 
     public Ex2Client(String level) {
-        int after_parse ;
-        try{
+        int after_parse;
+        try {
             after_parse = Integer.parseInt(level);
-            this.gameLevel = after_parse ;
+            this.gameLevel = after_parse;
         } catch (NumberFormatException e) {
             System.out.println("the level should be only numbers");
         }
@@ -57,16 +59,10 @@ public class Ex2Client implements Runnable {
                 synchronized (this) {
                     moveAgants(game, graphOfGame);
                 }
-
-//                CL_Agent temp_agent = null;
-//                CL_Pokemon temp_pok = null;
-//                edge_data temp_edge = null;
-                if (!(noAgentOnPokemonEdge())) {
-//                    Thread.sleep((int) ((Math.random() + 1) * 25));
-////                    int rnd = (int)(Math.random()*5 );
-////                    Thread.sleep(rnd);
-//                    double d = sleepTime();
-//                    Thread.sleep((int) d * 100);
+                if (noAgentOnPokemonEdge() != null) {
+                    double d = sleepTime();
+                    Thread.sleep((long) (d));
+//                    Thread.sleep((long)(min));
                 } else {
                     Thread.sleep(150);
                 }
@@ -100,6 +96,7 @@ public class Ex2Client implements Runnable {
             Arena.updateEdge(pokemonsList.get(a), graphOfGame);
         }
         initStartNodeOfAgents();
+//        indxOfPock= new int[agentsList.size()];
     }
 
 
@@ -114,23 +111,28 @@ public class Ex2Client implements Runnable {
             arena.updateEdge(pok, g);
         }
         arena.setPokemons(pokemonsList);
+        min = -1;
         for (CL_Agent agent : agentsList) {
-            agent.setOnPokemonEdge(false);
+
             int id = agent.getID();
             int dest = agent.getNextNode();
             int src = agent.getSrcNode();
             double v = agent.getValue();
-            pockToAgent();
+            //
+//            agent.set_SDT(100);
+//            if(agent.get_sg_dt()<min && min !=-1){
+//                min = agent.get_sg_dt();
+//            }
+            //
             if (dest == -1) {
+                agent.setOnPokemonEdge(false);
                 synchronized (Thread.currentThread()) {
-//                    CL_Pokemon pok = findValuestPokemon(src);
-//                    srcPok = pok.get_edge().getSrc();
-//                    dest = nextNode(agent, srcPok, pok);
-//                    if(agentsSameDest(agent , dest)){
-//                        dest = (int)((Math.random())*graphOfGame.nodeSize());
-//                    }
-                    int next_node = graphPaths.get(agent.getSrcNode()).get(agent.get_curr_fruit().get_edge().getDest()).get(1).getKey();
-                    game.chooseNextEdge(agent.getID(), next_node);
+                    CL_Pokemon pok = findValuestPokemon(src);
+                    srcPok = pok.get_edge().getSrc();
+                    dest = nextNode(agent, srcPok, pok);
+                    agent.set_curr_fruit(pok);
+                    takenPock.put(agent.getID(), pok);
+                    game.chooseNextEdge(agent.getID(), dest);
                 }
             }
             System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest + "   on edge " + pokOnEdge);
@@ -156,70 +158,20 @@ public class Ex2Client implements Runnable {
         double valueWithDis;
 //        boolean
         for (int i = 0; i < pokemonsList.size(); i++) {
-            dis = graphWeights.get(srcAgent).get(pokemonsList.get(i).get_edge().getSrc());
-            valueWithDis = (pokemonsList.get(i).getValue() / dis);
-            if (valueWithDis > max) {
-                max = valueWithDis;
-                pokIndex = i;
+            if (!takenPock.containsValue(pokemonsList.get(i))) {
+                dis = graphWeights.get(srcAgent).get(pokemonsList.get(i).get_edge().getSrc());
+                valueWithDis = (pokemonsList.get(i).getValue() / dis);
+                if (valueWithDis > max) {
+                    max = valueWithDis;
+                    pokIndex = i;
+                }
             }
         }
+
         pokemonsList.get(pokIndex).targetd();
         return pokemonsList.get(pokIndex);
     }
-//    public int findValuestPokemon(int srcAgent) {
-//        int pokIndex = 0;
-//        double max = 0;
-//        double dis;
-//        double valueWithDis;
-//        for (int i = 0; i < pokemonsList.size(); i++) {
-//            dis = graphWeights.get(srcAgent).get(pokemonsList.get(i).get_edge().getSrc());
-//            valueWithDis = (pokemonsList.get(i).getValue() / dis);
-//            if (valueWithDis > max) {
-//                max = valueWithDis;
-//                pokIndex = i;
-//            }
-//        }
-//        pokemonsList.get(pokIndex).targetd();
-//        return pokIndex;
-//    }
 
-    // ׳׳ ׳¡׳•׳× ׳׳‘׳—׳•׳¨ ׳׳₪׳•׳§׳™׳׳•׳ ׳™׳ ׳¡׳•׳›׳ ׳™׳ ׳׳₪׳™ ׳׳™ ׳”׳›׳™ ׳§׳¨׳•׳‘ ׳׳׳™׳”׳
-    public  void pockToAgent(){
-        int [] indxOfPock = new int[agentsList.size()];
-        for (int i = 0; i < agentsList.size(); i++) {
-            indxOfPock[i] = -1;
-
-        }
-        int counterOfPockNum = 0;
-//        int counterOfAgentsNum = 0;
-        int counterOfTakenAgents=0;
-        for(CL_Pokemon pock : pokemonsList){
-            double minDis = -1;
-            int minDisIndx = -1;
-            counterOfPockNum++;
-            int counterOfAgentsNum = 0;
-            for(CL_Agent agent : agentsList){
-                counterOfAgentsNum++;
-
-                double dis= algo.shortestPathDist(pock.get_edge().getSrc(), agent.getSrcNode());
-                if(minDis < dis || minDis == -1){
-                    minDis = dis;
-                    minDisIndx = counterOfAgentsNum-1;
-                }
-            }
-            indxOfPock[minDisIndx]= counterOfPockNum;
-            agentsList.get(minDisIndx).set_curr_fruit(pock);
-        }
-
-        for (int i = 0; i < agentsList.size(); i++) {
-            if(indxOfPock[i]==-1){
-//                int j = findValuestPokemon(i);
-//                indxOfPock[i] = j;
-                agentsList.get(i).set_curr_fruit(findValuestPokemon(i));
-            }
-        }
-
-    }
 
     public CL_Pokemon findClosetPokemon(int srcAgent) {
         double weight = 0;
@@ -234,19 +186,82 @@ public class Ex2Client implements Runnable {
         }
         return pokemonsList.get(index);
     }
-    public double sleepTime (){
-        geo_location srcLocation = graphOfGame.getNode(agentsList.get(0).getSrcNode()).getLocation() ;
-        if(agentsList.get(0).get_curr_fruit() != null ){
-            geo_location fruitLocation =agentsList.get(0).get_curr_fruit().getLocation() ;
-            double d = srcLocation.distance(fruitLocation) ;
-            d *= (agentsList.get(0).get_curr_fruit().get_edge().getWeight());
-            d /= agentsList.get(0).getSpeed();
-            return d ;
+
+    //    public double sleepTime (){
+//        System.out.println("in sleepTime");
+//        double min = -1;
+//        double d = 1;
+//        for (int i = 0; i < agentsList.size(); i++) {
+//            System.out.println("1*****************");
+//
+//            if(agentsList.get(i).isOnPokemonEdge()) {
+//                System.out.println("2*****************");
+//
+//
+//                if (agentsList.get(i).get_curr_fruit() != null) {
+//                    geo_location srcLocation = graphOfGame.getNode(agentsList.get(i).getSrcNode()).getLocation();
+//                    geo_location agentLocation = agentsList.get(i).getLocation();
+//                    geo_location fruitLocation = agentsList.get(i).get_curr_fruit().getLocation();
+//                    double pockToAgdis = agentLocation.distance(fruitLocation);
+//                    edge_data e = agentsList.get(i).get_curr_fruit().get_edge();
+//                    geo_location destLocation = graphOfGame.getNode(e.getDest()).getLocation();
+//
+//                    double edgeLength = srcLocation.distance(destLocation);
+//                    double norm = pockToAgdis/edgeLength;
+//                    d= norm*e.getWeight();
+//                    d/= agentsList.get(i).getSpeed();
+//                    System.out.println("3*****************");
+//
+////                    d = srcLocation.distance(fruitLocation);
+////                    d *= (agentsList.get(i).get_curr_fruit().get_edge().getWeight());
+////                    d /= agentsList.get(i).getSpeed();
+//                    System.out.println("d value: "+d);
+//                    if(d<min){
+//                        min = d;
+//                    }
+//                }
+//            }
+//        }
+//        if(min!=-1){
+//            return min;
+//        }
+//        return 1 ;
+//    }
+    public double sleepTime() {
+        double de, dist, w, d;
+        double min =-1;
+        for (int i = 0; i < agentsList.size(); i++) {
+
+            CL_Agent agent= agentsList.get(i);
+            if(agent.get_curr_edge()!=null) {
+                w = agent.get_curr_edge().getWeight();
+                geo_location dest = graphOfGame.getNode(agent.get_curr_edge().getDest()).getLocation();
+                geo_location src = graphOfGame.getNode(agent.get_curr_edge().getSrc()).getLocation();
+                de = src.distance(dest);
+                dist = agent.getLocation().distance(dest);
+                if (agent.get_curr_fruit().get_edge() == agent.get_curr_edge()) {
+                    dist = agent.get_curr_fruit().getLocation().distance(agent.getLocation());
+                }
+
+
+                double norm = dist / de;
+                double dt = w * norm / agent.getSpeed();
+                d = (long) (100.0 * dt);
+                if (min == -1 || d < min) {
+                    min = d;
+                }
+            }
+
+    }
+        if(min!=-1) {
+            return min;
         }
-        return 1 ;
+        return 100;
     }
 
-    public void refresh() {
+
+
+    public void refresh () {
         String gameString = game.toString();
         Gson gson = new Gson();
         JsonObject jsonObjectGame = gson.fromJson(gameString, JsonObject.class);
@@ -260,48 +275,59 @@ public class Ex2Client implements Runnable {
         arena.setTimeToEnd(game.timeToEnd());
     }
 
-    public CL_Agent whoOnPokemonEdge() {
-        CL_Agent tempAgent = null;
-        for (CL_Agent a : agentsList) {
-            if (a.isOnPokemonEdge()) {
-                tempAgent = a;
-            }
-        }
-        return tempAgent;
-    }
-
-    public CL_Pokemon whoIsOnTheEdge(edge_data e) {
-        CL_Pokemon tempPokemon = null;
-        for (CL_Pokemon pok : pokemonsList) {
-            if (pok.get_edge().equals(e)) {
-                tempPokemon = pok;
-            }
-        }
-        return tempPokemon;
-    }
-
-    public double timeToEatPokemon(CL_Agent agent, CL_Pokemon pok) {
-        double agent_speed = agent.getSpeed();
-        double edge_weight = pok.get_edge().getWeight();
-        geo_location pok_location = pok.getLocation();
-        geo_location agent_location = agent.getLocation();
-        double dis = agent_location.distance(pok_location);
-//        if (edge_weight * dis / agent_speed < 2){
 //
-//            return true;
+//    public CL_Agent whoOnPokemonEdge() {
+//        CL_Agent tempAgent = null;
+//        for (CL_Agent a : agentsList) {
+//            if (a.isOnPokemonEdge()) {
+//                tempAgent = a;
+//            }
 //        }
-        return ((edge_weight * dis) / agent_speed);
-    }
+//        return tempAgent;
+//    }
+//
+//    public CL_Pokemon whoIsOnTheEdge(edge_data e) {
+//        CL_Pokemon tempPokemon = null;
+//        for (CL_Pokemon pok : pokemonsList) {
+//            if (pok.get_edge().equals(e)) {
+//                tempPokemon = pok;
+//            }
+//        }
+//        return tempPokemon;
+//    }
+//
+//    public double timeToEatPokemon(CL_Agent agent, CL_Pokemon pok) {
+//        double agent_speed = agent.getSpeed();
+//        double edge_weight = pok.get_edge().getWeight();
+//        geo_location pok_location = pok.getLocation();
+//        geo_location agent_location = agent.getLocation();
+//        double dis = agent_location.distance(pok_location);
+////        if (edge_weight * dis / agent_speed < 2){
+////
+////            return true;
+////        }
+//        return ((edge_weight * dis) / agent_speed);
+//    }
 
-    public boolean noAgentOnPokemonEdge() {
+//    public boolean noAgentOnPokemonEdge() {
+//        boolean res = true;
+//        for (CL_Agent a : agentsList) {
+//            if (a.isOnPokemonEdge()) {
+//                res = false;
+//                break;
+//            }
+//        }
+//        return res;
+//    }
+
+    public CL_Agent noAgentOnPokemonEdge() {
         boolean res = true;
         for (CL_Agent a : agentsList) {
             if (a.isOnPokemonEdge()) {
-                res = false;
-                break;
+                return a;
             }
         }
-        return res;
+        return null;
     }
 
     public boolean agentsSameDest(CL_Agent agent , int dest) {
@@ -314,26 +340,26 @@ public class Ex2Client implements Runnable {
         }
         return false ;
     }
-
-    public void pokemonOnThePath(List<node_data> path) {
-        node_data dest = null;
-        edge_data e = null;
-        Iterator<node_data> it = path.iterator();
-        while (it.hasNext()) {
-            node_data src = it.next();
-            if (it.hasNext()) {
-                dest = it.next();
-            }
-            if (dest != null) {
-                e = graphOfGame.getEdge(it.next().getKey(), dest.getKey());
-                for (int i = 0; i < pokemonsList.size(); i++) {
-                    if (pokemonsList.get(i).get_edge().equals(e)) {
-                        pokemonsList.get(i).targetd();
-                    }
-                }
-            }
-        }
-    }
+//
+//    public void pokemonOnThePath(List<node_data> path) {
+//        node_data dest = null;
+//        edge_data e = null;
+//        Iterator<node_data> it = path.iterator();
+//        while (it.hasNext()) {
+//            node_data src = it.next();
+//            if (it.hasNext()) {
+//                dest = it.next();
+//            }
+//            if (dest != null) {
+//                e = graphOfGame.getEdge(it.next().getKey(), dest.getKey());
+//                for (int i = 0; i < pokemonsList.size(); i++) {
+//                    if (pokemonsList.get(i).get_edge().equals(e)) {
+//                        pokemonsList.get(i).targetd();
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     //Functions for init
@@ -412,47 +438,7 @@ public class Ex2Client implements Runnable {
         }
     }
 
-//    public static CL_Pokemon findClosetPokemon(List<CL_Pokemon> pokemonList, int srcAgent) {
-//        int pokIndex = 0;
-//        double min = Double.MAX_VALUE;
-//        double dis = 0;
-//        for (int i = 0; i < pokemonList.size(); i++) {
-//            dis = graphWeights.get(srcAgent).get(pokemonList.get(i).get_edge().getSrc());
-//            if (dis < min) {
-//                min = dis;
-//                pokIndex = i;
-//            }
-//        }
-//        return pokemonList.get(pokIndex);
-//    }
-//
-//
-//    public boolean makeToDest(List<CL_Agent> agentsList) {
-//        boolean res = true;
-//        for (int i = 0; i < agentsList.size(); i++) {
-//            if (agentsList.get(i).getMakeToDest() != -1) {
-//                res = false;
-//            }
-//        }
-//        return res;
-//    }
 
-
-    //    private static int nextNode(directed_weighted_graph g, int src, int pokSrc, CL_Pokemon pok) {
-//        algo.init(g);
-//        if (src == pokSrc) {
-//            pokOnEdge = true;
-//            ;
-//            return pok.get_edge().getDest();
-//        }
-//        List<node_data> path = algo.shortestPath(src, pokSrc);
-//        int ans = -1;
-//        if (path.size() == 1) {
-//            return path.get(0).getKey();
-//        } else {
-//            return path.get(1).getKey();
-//        }
-//    }
 }
 
 
