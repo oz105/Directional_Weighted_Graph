@@ -145,6 +145,9 @@ public class Ex2Client implements Runnable {
             return pok.get_edge().getDest();
         }
         List<node_data> path = graphPaths.get(a.getSrcNode()).get(pokSrc);
+        if(path.size() == 1) {
+            return path.get(0).getKey();
+        }
         return path.get(1).getKey();
     }
 
