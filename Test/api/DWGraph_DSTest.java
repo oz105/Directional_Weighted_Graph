@@ -387,45 +387,6 @@ class DWGraph_DSTest {
         assertFalse(b);
     }
 
-//
-//    @Test
-//    void hasEdge(){
-//        wg1 = wgEmpty(5);
-//        assertFalse(wg1.hasEdge(0, 1));
-//        wg1.connect(0, 4, 0.3);
-//        assertTrue(wg1.hasEdge(0, 4));
-//    }
-//    @Test
-//    void getEdge() {
-//        wg1 = wgWhole(v_size);
-//        int a = nextRnd(0, v_size / 2);
-//        int b = nextRnd((v_size / 2 + 1), v_size - 1);
-//        double d = wg1.getEdge(a, b);
-//        assertNotEquals(-1, d);
-//        wg1.removeEdge(a, b);
-//        d = wg1.getEdge(b, a);
-//        assertEquals(-1, d);
-//        d = wg1.getEdge(a, v_size + 1);
-//        assertEquals(-1, d);
-//
-//        wg1.connect(a, b, 0);
-//        assertEquals(0, d);
-//
-//    }
-//
-//    @Test
-//    void addNode() {
-//        directed_weighted_graph
-//        wg1 = wgWhole(v_size);
-//        wg1.addNode(20);
-//        boolean b = false;
-//        if (wg1.getNode(20) != null) {
-//            b = true;
-//        }
-//        assertEquals(true, b);
-//    }
-
-
     @Test
     void creatingTime() {
         int vNum = 1000000;

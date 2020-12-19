@@ -55,8 +55,6 @@ public class MyFrame extends JFrame {
         bufferImage = createImage(w, h);
         bufferGraphics = bufferImage.getGraphics();
         paintComponent(bufferGraphics);
-//		g.clearRect(0, 0, w, h);
-        //	updateFrame();
         g.drawImage(bufferImage, 0, 0, this);
 
     }
@@ -144,7 +142,6 @@ public class MyFrame extends JFrame {
 
                 geo_location fp = this._w2f.world2frame(c);
                 graphics2D.drawImage(agent,(int)fp.x()-r,(int)fp.y()-(r+15),4*r,4*r,this);
-//                g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
             }
         }
     }
@@ -156,7 +153,6 @@ public class MyFrame extends JFrame {
         g.setFont(new Font("name", Font.BOLD,15));
         geo_location pos = n.getLocation();
         geo_location fp = this._w2f.world2frame(pos);
-//        g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
         graphics2D.drawImage(location,(int)fp.x()-r,(int)fp.y()-r-12,3*r,3*r,this);
         g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 4 * r);
     }
@@ -168,6 +164,5 @@ public class MyFrame extends JFrame {
         geo_location s0 = this._w2f.world2frame(s);
         geo_location d0 = this._w2f.world2frame(d);
         g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
-//        	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
     }
 }
