@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Ex2Client implements Runnable {
+    private int ID ;
     private static HashMap<Integer, HashMap<Integer, List<node_data>>> graphPaths;
     private static HashMap<Integer, HashMap<Integer, Double>> graphWeights;
     private static List<CL_Pokemon> pokemonsList;
@@ -36,11 +37,21 @@ public class Ex2Client implements Runnable {
             System.out.println("the level should be only numbers");
         }
     }
+    public Ex2Client(String level , int id) {
+        this.ID = id ;
+        int after_parse_level;
+        try {
+            after_parse_level = Integer.parseInt(level);
+            this.gameLevel = after_parse_level;
+        } catch (NumberFormatException e) {
+            System.out.println("the level should be only numbers");
+        }
+    }
 
     @Override
     public void run() {
         game = Game_Server_Ex2.getServer(gameLevel);
-        game.login(207935214);
+        game.login(ID);
         init(game);
         game.startGame();
         System.out.println("game start!");
@@ -223,7 +234,7 @@ public class Ex2Client implements Runnable {
                     }
                     double norm = dist / de;
                     double dt = w * norm / agent.getSpeed();
-                    d = (long) (1000.0 * dt);
+                    d = (long) (995.0 * dt);
                     if (min == -1 || d < min) {
                         min = d;
                     }
@@ -231,7 +242,7 @@ public class Ex2Client implements Runnable {
             }
         }
         if (min == 0) {
-            return 10;
+            return 5;
         }
         if (min != -1 && dist != 0) {
             return min;
