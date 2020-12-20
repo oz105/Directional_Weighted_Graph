@@ -1,96 +1,76 @@
 package gameClient;
 
+import Server.Game_Server_Ex2;
+import api.DWGraph_DS;
+import api.NodeData;
+import api.game_service;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArenaTest {
+    private Arena arena ;
+    private static game_service game;
+    private DWGraph_DS g ;
+    private static List<CL_Pokemon> pokemonsList;
 
-    @Test
-    void setPokemons() {
+    @BeforeEach
+    public void init (){
+        game = Game_Server_Ex2.getServer(0);
+        arena = new Arena();
+        g = new DWGraph_DS();
+        for (int i = 0; i < 11; i++) {
+            NodeData n = new NodeData(i);
+            g.addNode(n);
+        }
+        g.connect(1, 8, 5);
+        g.connect(1, 3, 2);
+        g.connect(1, 10, 1);
+        g.connect(3, 9, 4);
+        g.connect(9, 10, 3);
+        g.connect(3, 6, 3);
+        g.connect(7, 8, 2);
+        g.connect(2, 6, 3);
+        g.connect(2, 4, 2);
+        g.connect(4, 5, 1);
+        pokemonsList = (Arena.json2Pokemons(game.getPokemons()));
+        arena.setPokemons(pokemonsList);
+        game.startGame();
     }
 
-    @Test
-    void setAgents() {
-    }
 
     @Test
-    void setGraph() {
-    }
-
-    @Test
-    void getAgents() {
-    }
-
-    @Test
-    void getPokemons() {
-    }
-
-    @Test
-    void getGraph() {
-    }
-
-    @Test
-    void get_info() {
-    }
-
-    @Test
-    void set_info() {
-    }
-
-    @Test
-    void testGetAgents() {
-    }
-
-    @Test
-    void json2Pokemons() {
-    }
-
-    @Test
-    void updateEdge() {
-    }
-
-    @Test
-    void w2f() {
-    }
-
-    @Test
-    void getGrade() {
-    }
-
-    @Test
-    void setGrade() {
-    }
-
-    @Test
-    void getMoves() {
-    }
-
-    @Test
-    void setMoves() {
-    }
-
-    @Test
-    void getGameLevel() {
-    }
-
-    @Test
-    void setGameLevel() {
-//        int i = this.getGameLevel();
-    }
-
-    @Test
-    void getTimeToEnd() {
-//        long l1 = this.getTimeToEnd();
-//        assertTrue(this.getTimeToEnd()<l1);
+    void setAndGetGraph() {
+        arena.setGraph(g);
+        assertEquals(g,arena.getGraph());
+        arena.setGraph(null);
+        assertEquals(null , arena.getGraph());
 
     }
 
     @Test
-    void setTimeToEnd() {
-//        long l = this.getTimeToEnd();
-//        this.setTimeToEnd(l+1000);
-//        long l2 = this.getTimeToEnd();
-//        assertTrue(l+100-l2<5);
+    void getAndSetGrade() {
+        assertTrue(arena.getGrade() == 0);
+        arena.setGrade(150);
+        assertEquals(150,arena.getGrade());
     }
+
+    @Test
+    void getAndSetMoves() {
+        assertTrue(arena.getMoves() == 0);
+        arena.setMoves(100);
+        assertEquals(10,arena.getMoves());
+    }
+
+    @Test
+    void getAndSetGameLevel() {
+        System.out.println(arena.getGameLevel());
+        assertTrue(arena.getGameLevel() == 0);
+        arena.setGameLevel(2);
+        assertTrue(arena.getGameLevel() == 2);
+    }
+
 }

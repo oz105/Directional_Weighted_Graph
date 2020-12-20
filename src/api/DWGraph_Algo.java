@@ -5,10 +5,15 @@ import com.google.gson.*;
 import gameClient.util.Point3D;
 
 /**
- * This Class represents a directional weighted graph.
- * support a large number of nodes (over 100,000).
- * The implementation based on an efficient compact representation
- * Based on Hashmap.
+ * This Class represents a Directed Weighted Graph Theory Algorithms including:
+ * 0. clone(); (copy)
+ * 1. init(graph);
+ * 2. isConnected(); // strongly
+ * 3. double shortestPathDist(int src, int dest);
+ * 4. List<node_data> shortestPath(int src, int dest);
+ * 5. Save(file); // JSON file
+ * 6. Load(file); // JSON file
+ *
  */
 
 public class DWGraph_Algo implements dw_graph_algorithms {

@@ -52,23 +52,7 @@ public class Arena {
 		this._agents = f;
 	}
 	public void setGraph(directed_weighted_graph g) {this._gg =g;}//init();}
-//	private void init( ) {
-//		MIN=null; MAX=null;
-//		double x0=0,x1=0,y0=0,y1=0;
-//		Iterator<node_data> iter = _gg.getV().iterator();
-//		while(iter.hasNext()) {
-//			geo_location c = iter.next().getLocation();
-//			if(MIN==null) {x0 = c.x(); y0=c.y(); x1=x0;y1=y0;MIN = new Point3D(x0,y0);}
-//			if(c.x() < x0) {x0=c.x();}
-//			if(c.y() < y0) {y0=c.y();}
-//			if(c.x() > x1) {x1=c.x();}
-//			if(c.y() > y1) {y1=c.y();}
-//		}
-//		double dx = x1-x0, dy = y1-y0;
-//		MIN = new Point3D(x0-dx/10,y0-dy/10);
-//		MAX = new Point3D(x1+dx/10,y1+dy/10);
-//
-//	}
+
 	public List<CL_Agent> getAgents() {return _agents;}
 	public List<CL_Pokemon> getPokemons() {return _pokemons;}
 
@@ -83,7 +67,6 @@ public class Arena {
 		this._info = _info;
 	}
 
-	////////////////////////////////////////////////////
 	public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
 		ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
 		try {
