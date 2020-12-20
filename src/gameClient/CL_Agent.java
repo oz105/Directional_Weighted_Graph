@@ -164,10 +164,6 @@ public class CL_Agent {
 		this.set_sg_dt(ddt);
 	}
 
-	public int getMakeToDest() {
-		return makeToDest;
-	}
-
 	public boolean isOnPokemonEdge() {
 		return onPokemonEdge;
 	}

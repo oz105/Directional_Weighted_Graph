@@ -32,7 +32,6 @@ public class Arena {
 	private List<CL_Agent> _agents;
 	private List<CL_Pokemon> _pokemons;
 	private List<String> _info;
-//	private static double minX, minY, maxX, maxY;
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
 
@@ -53,23 +52,23 @@ public class Arena {
 		this._agents = f;
 	}
 	public void setGraph(directed_weighted_graph g) {this._gg =g;}//init();}
-	private void init( ) {
-		MIN=null; MAX=null;
-		double x0=0,x1=0,y0=0,y1=0;
-		Iterator<node_data> iter = _gg.getV().iterator();
-		while(iter.hasNext()) {
-			geo_location c = iter.next().getLocation();
-			if(MIN==null) {x0 = c.x(); y0=c.y(); x1=x0;y1=y0;MIN = new Point3D(x0,y0);}
-			if(c.x() < x0) {x0=c.x();}
-			if(c.y() < y0) {y0=c.y();}
-			if(c.x() > x1) {x1=c.x();}
-			if(c.y() > y1) {y1=c.y();}
-		}
-		double dx = x1-x0, dy = y1-y0;
-		MIN = new Point3D(x0-dx/10,y0-dy/10);
-		MAX = new Point3D(x1+dx/10,y1+dy/10);
-
-	}
+//	private void init( ) {
+//		MIN=null; MAX=null;
+//		double x0=0,x1=0,y0=0,y1=0;
+//		Iterator<node_data> iter = _gg.getV().iterator();
+//		while(iter.hasNext()) {
+//			geo_location c = iter.next().getLocation();
+//			if(MIN==null) {x0 = c.x(); y0=c.y(); x1=x0;y1=y0;MIN = new Point3D(x0,y0);}
+//			if(c.x() < x0) {x0=c.x();}
+//			if(c.y() < y0) {y0=c.y();}
+//			if(c.x() > x1) {x1=c.x();}
+//			if(c.y() > y1) {y1=c.y();}
+//		}
+//		double dx = x1-x0, dy = y1-y0;
+//		MIN = new Point3D(x0-dx/10,y0-dy/10);
+//		MAX = new Point3D(x1+dx/10,y1+dy/10);
+//
+//	}
 	public List<CL_Agent> getAgents() {return _agents;}
 	public List<CL_Pokemon> getPokemons() {return _pokemons;}
 
@@ -95,7 +94,6 @@ public class Arena {
 				c.update(ags.get(i).toString());
 				ans.add(c);
 			}
-			//= getJSONArray("Agents");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -121,7 +119,6 @@ public class Arena {
 		return ans;
 	}
 	public static void updateEdge(CL_Pokemon fr, directed_weighted_graph g) {
-		//	oop_edge_data ans = null;
 		Iterator<node_data> itr = g.getV().iterator();
 		while(itr.hasNext()) {
 			node_data v = itr.next();
@@ -181,29 +178,6 @@ public class Arena {
 		Range2Range ans = new Range2Range(world, frame);
 		return ans;
 	}
-
-//	private void getMinAndMax(directed_weighted_graph gg){
-//
-//		for( node_data node : gg.getV()){
-//			if(node.getLocation().x()<minX){
-//				minX =  node.getLocation().x();
-//			}
-//			if(node.getLocation().x()>maxX){
-//				maxX =  node.getLocation().x();
-//			}
-//			if(node.getLocation().y()<minY){
-//				minY =  node.getLocation().y();
-//			}
-//			if(node.getLocation().y()>maxY){
-//				maxY =  node.getLocation().y();
-//			}
-//		}
-//		MIN = new Point3D(minX, minY, 0);
-//		MAX = new Point3D(maxX, maxY, 0);
-//
-//
-//	}
-
 	public int getGrade (){
 		return grade ;
 	}

@@ -4,7 +4,12 @@ import java.util.*;
 import com.google.gson.*;
 import gameClient.util.Point3D;
 
-
+/**
+ * This Class represents a directional weighted graph.
+ * support a large number of nodes (over 100,000).
+ * The implementation based on an efficient compact representation
+ * Based on Hashmap.
+ */
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gAlgo;
@@ -225,7 +230,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     /**
-     * NEED TO BE FILL EXPLAIN
+     * This method gets a random node int the graph, by using bfs algorithm if checks if there's a
+     * path from that node to all the other nodes, if there's no path from this node to another it
+     * return false, if there is- it will check if there's a path from every node in the graph to
+     * the given node
+     * if there is then this graph is strongly connected and the method return true, if not then
+     * it returns false.
      */
     public boolean bfs(node_data node) {
         for (node_data n : this.gAlgo.getV()) {
