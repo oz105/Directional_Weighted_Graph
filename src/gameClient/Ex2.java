@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Ex2 implements ActionListener {
+    private static int ID ;
+    private static int level ;
     private static JLabel idLabel;
     private static JTextField idText;
     private static JLabel levelLabel;
@@ -14,16 +16,23 @@ public class Ex2 implements ActionListener {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            String id = args[0];
-            String level = args[1];
             try {
-                int ID = Integer.parseInt(id);
-                Thread Ex2Client = new Thread(new Ex2Client(level, ID));
-                Ex2Client.start();
+                ID = Integer.parseInt(args[0]);
+
             } catch (NumberFormatException numberFormatException) {
                 System.out.println("ID should contains only numbers");
+            }
+            try{
+                level = Integer.parseInt(args[1]) ;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
 
             }
+            Thread Ex2Client = new Thread(new Ex2Client(level, ID));
+            Ex2Client.start();
+
+
+
         } else {
             JPanel panel = new JPanel();
             JFrame frame = new JFrame();
@@ -61,14 +70,18 @@ public class Ex2 implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String id = idText.getText();
-        String level = levelText.getText();
+        String levelString = levelText.getText();
         try {
-            int ID = Integer.parseInt(id);
-            Thread Ex2Client = new Thread(new Ex2Client(level, ID));
-            Ex2Client.start();
+            ID = Integer.parseInt(id);
         } catch (NumberFormatException numberFormatException) {
             System.out.println("ID should contains only numbers");
-
         }
+        try{
+            level = Integer.parseInt(levelString);
+        } catch (NumberFormatException numberFormatException) {
+            numberFormatException.printStackTrace();
+        }
+        Thread Ex2Client = new Thread(new Ex2Client(level, ID));
+        Ex2Client.start();
     }
 }

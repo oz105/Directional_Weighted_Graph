@@ -37,15 +37,9 @@ public class Ex2Client implements Runnable {
             System.out.println("the level should be only numbers");
         }
     }
-    public Ex2Client(String level , int id) {
+    public Ex2Client(int level , int id) {
         this.ID = id ;
-        int after_parse_level;
-        try {
-            after_parse_level = Integer.parseInt(level);
-            this.gameLevel = after_parse_level;
-        } catch (NumberFormatException e) {
-            System.out.println("the level should be only numbers");
-        }
+        this.gameLevel = level;
     }
 
     @Override
