@@ -76,6 +76,10 @@ public class Ex2Client implements Runnable {
         System.exit(0);
 
     }
+    /**
+     * This method Init the game before we start it.
+     *
+     */
 
     private void init(game_service game) {
         arena = new Arena();
@@ -96,9 +100,15 @@ public class Ex2Client implements Runnable {
         initStartNodeOfAgents();
     }
 
+    /**
+     * This method will run over all the agents list
+     * and give to any agent pokemon to collect
+     * based on the function "findValuestPokemon"
+     *
+     */
 
     private void moveAgents(game_service game, directed_weighted_graph g) {
-        int srcPok = 0;
+        int srcPok = 0 ;
         String agentsMove = game.move(); // Use max 10 times in 1 sec .
         agentsList = Arena.getAgents(agentsMove, g);
         arena.setAgents(agentsList);
@@ -128,12 +138,28 @@ public class Ex2Client implements Runnable {
         }
     }
 
+    /**
+     * This method will be used only if
+     * there is no way out from the agent will be sent
+     * and it will pick for him random node because
+     * we dont want agent stuck in some node there is no way out.
+     *
+     */
+
     private int randDest() {
         int num_of_nodes = graphOfGame.nodeSize();
         int rand = (int) (Math.random() * num_of_nodes);
+        if(graphOfGame.getE(rand).size() == 0) {
+            randDest() ;
+        }
         return rand;
     }
 
+    /**
+     * This method will go to the Hashmap that contains all the paths
+     * in the graph and pull from there the next node the agent should go.
+     *
+     */
     private int nextNode(CL_Agent a, int pokSrc, CL_Pokemon pok) {
         if (a.getSrcNode() == pokSrc) {
             a.setOnPokemonEdge(true);
@@ -146,6 +172,12 @@ public class Ex2Client implements Runnable {
         }
         return path.get(1).getKey();
     }
+    /**
+     * This method will looking for the valuest pokemon to each agent
+     * based on his location.
+     * will check what is the value of the pokemon and split it in the weight to get to him.
+     *
+     */
 
     public CL_Pokemon findValuestPokemon(int srcAgent) {
         int pokIndex = 0;
@@ -167,6 +199,12 @@ public class Ex2Client implements Runnable {
         return pokemonsList.get(pokIndex);
     }
 
+    /**
+     * This method will compute the time that the Tread should sleep ,
+     * base on the agent is on the edge of the pokemon ,
+     * and we will search the min time if there is more than 1 agent on pokemon edge
+     *
+     */
 
     public double sleepTime() {
         double de, w, d;
@@ -201,6 +239,12 @@ public class Ex2Client implements Runnable {
         return 100;
     }
 
+    /**
+     * This method will return CL agent iff there is agent and pok on the same edge
+     * and null otherwise .
+     *
+     */
+
     public CL_Agent noAgentOnPokemonEdge() {
         for (CL_Agent a : agentsList) {
             if (a.isOnPokemonEdge()) {
@@ -209,6 +253,12 @@ public class Ex2Client implements Runnable {
         }
         return null;
     }
+
+    /**
+     * This method show the information of the game on the gui
+     * it's constantly pull information from the game such as time to end , score and moves and update it.
+     *
+     */
 
     public void refresh() {
         String gameString = game.toString();
@@ -225,6 +275,16 @@ public class Ex2Client implements Runnable {
     }
 
     //Functions for init
+
+    /**
+     * Init the Hashmaps and set in them all the paths of the graph
+     * and all the weights of the paths .
+     * This is very efficiency because instead of
+     * constantly performing the Dijkstra algorithm while the game is running
+     * it just pulls the next node to which it should go what hashmap
+     *
+     * @param g
+     */
     public void initGraphPathsAndWeights(directed_weighted_graph g) {
         graphPaths = new HashMap<Integer, HashMap<Integer, List<node_data>>>();
         graphWeights = new HashMap<Integer, HashMap<Integer, Double>>();
@@ -244,6 +304,10 @@ public class Ex2Client implements Runnable {
         }
     }
 
+    /**
+     * Init the first node of the agent based on the src of the pok .
+     *
+     */
     public void initStartNodeOfAgents() {
         String gameInfo = game.toString();
         JSONObject jsonObject;
@@ -265,6 +329,11 @@ public class Ex2Client implements Runnable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This methos get a String of Json and make from it directed_weighted_graph.
+     *
+     */
 
     public static directed_weighted_graph stringToGraph(String s) {
         directed_weighted_graph g = new DWGraph_DS();
